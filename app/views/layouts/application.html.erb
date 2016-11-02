@@ -18,7 +18,7 @@
           <% if !@user.nil? %>
               <%= @user[:info][:name] %>
               <!--img class="avatar" src="<%= @user[:info][:image] %>" width="50"/-->
-              <a href="https://<%= Rails.application.secrets.auth0_domain %>/v2/logout">Logout</a>
+              <a href="https://<%= Rails.application.secrets.auth0_domain %>/v2/logout?returnTo=http://localhost:3000/">Logout</a>
           <% else %>
             <a  href="javascript:;" onclick="lock.show();">Login</a>
           <% end %>
@@ -29,3 +29,4 @@
     </div>
   </body>
 </html>
+

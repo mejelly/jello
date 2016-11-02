@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Article:</strong>
+  <%= @translation.article %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @translation.user_id %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @translation.status %>
+</p>
+
+<p>
+  <strong>Article section:</strong>
+  <%= @translation.article_section %>
+</p>
+
+<p>
+  <strong>Translation section:</strong>
+  <%= @translation.translation_section %>
+</p>
+
+<%= link_to 'Edit', edit_translation_path(@translation) %> |
+<%= link_to 'Back', translations_path %>

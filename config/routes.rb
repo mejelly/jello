@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :translations
+  resources :articles
   root 'langing_page#home'
   get 'dashboard' => 'dashboard#show'
   get '/auth/auth0/callback' => 'auth0#callback'
