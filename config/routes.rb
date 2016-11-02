@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'translation_page/index'
-
   resources :translations
   resources :articles
   root 'landing_page#home'
@@ -9,5 +7,6 @@ Rails.application.routes.draw do
   get '/auth/auth0/callback' => 'auth0#callback'
   get '/auth/failure'        => 'auth0#failure'
 
+  get 'translate' => 'translations#translate'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

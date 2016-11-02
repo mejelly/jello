@@ -1,5 +1,6 @@
 class TranslationsController < ApplicationController
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
+ # before_action :set_article, only: [:translate]
   before_action :authenticate_user!
   # GET /translations
   # GET /translations.json
@@ -14,13 +15,17 @@ class TranslationsController < ApplicationController
 
   # GET /translations/new
   def new
-    @translation = Translation.new
+    git @translation = Translation.new
   end
 
   # GET /translations/1/edit
   def edit
   end
 
+  def translate
+    puts '---'
+    #format.html { render :translate }
+  end
   # POST /translations
   # POST /translations.json
   def create
@@ -70,5 +75,8 @@ class TranslationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def translation_params
       params.require(:translation).permit(:article_id, :user_id, :status, :article_section, :translation_section)
+    end
+    def set_article
+      params.require(:article).permit(:user_id, :title, :url, :content)
     end
 end
