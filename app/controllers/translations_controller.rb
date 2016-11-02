@@ -1,6 +1,5 @@
 class TranslationsController < ApplicationController
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
- # before_action :set_article, only: [:translate]
   before_action :authenticate_user!
   # GET /translations
   # GET /translations.json
@@ -23,7 +22,10 @@ class TranslationsController < ApplicationController
   end
 
   def translate
-    puts '---'
+    puts params[:article_id]
+    puts params[:user_id]
+    @originalArticle=Article.find_by(user_id: params[:user_id], id: params[:article_id])
+    puts @originalArticle
     #format.html { render :translate }
   end
   # POST /translations
@@ -76,7 +78,5 @@ class TranslationsController < ApplicationController
     def translation_params
       params.require(:translation).permit(:article_id, :user_id, :status, :article_section, :translation_section)
     end
-    def set_article
-      params.require(:article).permit(:user_id, :title, :url, :content)
-    end
+
 end
