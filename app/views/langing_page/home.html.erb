@@ -1,12 +1,8 @@
-<div id="root" style="width: 320px; margin: 40px auto; padding: 10px; border-style: dashed; border-width: 1px; box-sizing: border-box;">
-  embedded area
-</div>
 <script src="https://cdn.auth0.com/js/lock/10.2/lock.min.js"></script>
 <script>
   var lock = new Auth0Lock(
       '<%= Rails.application.secrets.auth0_client_id %>',
       '<%= Rails.application.secrets.auth0_domain %>', {
-        container: 'root',
         auth: {
           redirectUrl: 'http://localhost:3000/auth/auth0/callback',
           responseType: 'code',
@@ -15,5 +11,4 @@
           }
         }
       });
-  lock.show();
 </script>
