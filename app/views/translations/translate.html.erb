@@ -18,8 +18,8 @@
       {
         $(this).removeAttr('checked');
       }
-
     });
+
   });
 
 </script>
@@ -27,16 +27,21 @@
   <% #@originalArticle.content
      JSON.parse(@article_json).each do |sentence|
      %>
-      <div><label><input type="checkbox" name="articleSentence" id="articleSentence<%=sentence[0]%>" value="<%=sentence[0]%>" ><%= sentence[1] %></label></div>
+      <div><label><input type="checkbox" name="articleSentence" id="articleSentence<%=sentence[0]%>" value="<%=sentence[0]%>" ><%= sentence[1] %>.</label></div>
       <%
       end
   %>
 </div>
 <div class="col-lg-6">
+  <%= form_tag("/saveGist", method: "get", class: "nifty_form") do %>
   <div class="form-group row">
-    <textarea class="" id="translateHere">
+    <textarea class="" id="translateHere" name="translateHere" >
+      <%= @translatedText%>
     </textarea>
+    <div class="actions">
+      <%= submit_tag %>
+    </div>
   </div>
-
+  <% end %>
 
 </div>

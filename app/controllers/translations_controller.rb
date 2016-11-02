@@ -14,7 +14,7 @@ class TranslationsController < ApplicationController
 
   # GET /translations/new
   def new
-    git @translation = Translation.new
+    @translation = Translation.new
   end
 
   # GET /translations/1/edit
@@ -22,6 +22,7 @@ class TranslationsController < ApplicationController
   end
 
   def translate
+    @translatedText=cookies[:translatedText]
     article_id = params[:article_id]
     user_id = params[:user_id]
     @originalArticle=Article.find_by(user_id: user_id, id: article_id)
@@ -38,6 +39,16 @@ class TranslationsController < ApplicationController
     end
     temp +='}'
     @article_json=temp
+  end
+
+  def saveGist
+    if (!params[:translateHere].nil? || cookies[:translatedText].to_s!=params[:translateHere].to_s)
+     cookies[:translatedText] = params[:translateHere]
+    end
+    @translatedText=cookies[:translatedText]
+    puts '----------------------->'
+    puts @translatedText
+    redirect_to :back
   end
 
   # POST /translations
