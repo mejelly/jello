@@ -22,12 +22,24 @@ class TranslationsController < ApplicationController
   end
 
   def translate
-    puts params[:article_id]
-    puts params[:user_id]
-    @originalArticle=Article.find_by(user_id: params[:user_id], id: params[:article_id])
-    puts @originalArticle
-    #format.html { render :translate }
+    article_id = params[:article_id]
+    user_id = params[:user_id]
+    @originalArticle=Article.find_by(user_id: user_id, id: article_id)
+    article_arr = @originalArticle.content.split('.')
+    i=0
+    temp='{'
+    article_arr.each do |item|
+       if(i>0)
+         temp = temp +','
+       end
+       i=i+1
+     # temp += "\"" +article_id + user_id + i.to_s + "\":\"" + item + "\""
+       temp += "\"" + i.to_s + "\":\"" + item + "\""
+    end
+    temp +='}'
+    @article_json=temp
   end
+
   # POST /translations
   # POST /translations.json
   def create

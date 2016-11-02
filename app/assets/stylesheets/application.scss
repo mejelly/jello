@@ -43,6 +43,22 @@
   min-height: 500px;
 }
 
+.highlightOriginal
+{
+  background: yellow;
+}
+#originalArticle
+{
+  input
+  {
+    display: none;
+  }
+  label{
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: 400;
+  }
+}
 /**/
 
 .linedwrap {
