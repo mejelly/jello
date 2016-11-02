@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe LangingPageController, type: :controller do
+RSpec.describe LandingPageController, type: :controller do
 
   describe "GET #home" do
     it "returns http success" do

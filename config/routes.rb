@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   resources :translations
   resources :articles
-  root 'langing_page#home'
+  root 'landing_page#home'
   get 'dashboard' => 'dashboard#show'
   get '/auth/auth0/callback' => 'auth0#callback'
   get '/auth/failure'        => 'auth0#failure'

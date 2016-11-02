@@ -6,13 +6,27 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script src="https://cdn.auth0.com/js/lock/10.2/lock.min.js"></script>
+    <script>
+      var lock = new Auth0Lock(
+          '<%= Rails.application.secrets.auth0_client_id %>',
+          '<%= Rails.application.secrets.auth0_domain %>', {
+            auth: {
+              redirectUrl: 'http://localhost:3000/auth/auth0/callback',
+              responseType: 'code',
+              params: {
+                scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+              }
+            }
+          });
+    </script>
   </head>
 
   <body>
     <div class="container-fluid" id="pgContainer">
       <div class="row" id="pgHeader">
         <div class="col-lg-6 col-xs-12">
-          MeJelly
+         <a href="/">MeJelly</a>
         </div>
         <div class="col-lg-6 col-xs-12 text-right">
           <% if !@user.nil? %>
