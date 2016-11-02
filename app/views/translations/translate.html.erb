@@ -1,16 +1,47 @@
 <script>
   $(function() {
     $("#translateHere").linedtextarea();
+    $('input[type=checkbox]').change(function(e) {
+      var current = parseInt($(this).val());
+      var prevline = current-1;
+      var nextline = current + 1;
+
+      if($('#articleSentence'+nextline+'[type=checkbox]').is(':checked'))
+      {
+        $(this).prop("checked", true);
+      }
+      else if($('#articleSentence'+prevline+'[type=checkbox]').is(':checked') || prevline<=0)
+      {
+        $(this).parent().toggleClass('highlightOriginal');
+      }
+      else
+      {
+        $(this).removeAttr('checked');
+      }
+    });
+
   });
 
 </script>
-<div class="col-lg-6">
-  <%= @originalArticle.content %>
+<div class="col-lg-6" id="originalArticle">
+  <% #@originalArticle.content
+     JSON.parse(@article_json).each do |sentence|
+     %>
+      <div><label><input type="checkbox" name="articleSentence" id="articleSentence<%=sentence[0]%>" value="<%=sentence[0]%>" ><%= sentence[1] %>.</label></div>
+      <%
+      end
+  %>
 </div>
 <div class="col-lg-6">
+  <%= form_tag("/saveGist", method: "get", class: "nifty_form") do %>
   <div class="form-group row">
-    <textarea class="" id="translateHere">
+    <textarea class="" id="translateHere" name="translateHere" >
+      <%= @translatedText%>
     </textarea>
+    <div class="actions">
+      <%= submit_tag %>
+    </div>
   </div>
+  <% end %>
 
 </div>

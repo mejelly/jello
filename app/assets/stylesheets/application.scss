@@ -41,8 +41,26 @@
 #translateHere{
   width: 100%;
   min-height: 500px;
+  word-break: break-all;
+
 }
 
+.highlightOriginal
+{
+  background: yellow;
+}
+#originalArticle
+{
+  input
+  {
+    display: none;
+  }
+  label{
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: 400;
+  }
+}
 /**/
 
 .linedwrap {

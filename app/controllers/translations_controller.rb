@@ -88,7 +88,7 @@ class TranslationsController < ApplicationController
 
   # GET /translations/new
   def new
-    git @translation = Translation.new
+    @translation = Translation.new
   end
 
   # GET /translations/1/edit
@@ -96,12 +96,35 @@ class TranslationsController < ApplicationController
   end
 
   def translate
-    puts params[:article_id]
-    puts params[:user_id]
-    @originalArticle=Article.find_by(user_id: params[:user_id], id: params[:article_id])
-    puts @originalArticle
-    #format.html { render :translate }
+    @translatedText=cookies[:translatedText]
+    article_id = params[:article_id]
+    user_id = params[:user_id]
+    @originalArticle=Article.find_by(user_id: user_id, id: article_id)
+    article_arr = @originalArticle.content.split('.')
+    i=0
+    temp='{'
+    article_arr.each do |item|
+       if(i>0)
+         temp = temp +','
+       end
+       i=i+1
+     # temp += "\"" +article_id + user_id + i.to_s + "\":\"" + item + "\""
+       temp += "\"" + i.to_s + "\":\"" + item + "\""
+    end
+    temp +='}'
+    @article_json=temp
   end
+
+  def saveGist
+    if (!params[:translateHere].nil? || cookies[:translatedText].to_s!=params[:translateHere].to_s)
+     cookies[:translatedText] = params[:translateHere]
+    end
+    @translatedText=cookies[:translatedText]
+    puts '----------------------->'
+    puts @translatedText
+    redirect_to :back
+  end
+
   # POST /translations
   # POST /translations.json
   def create
