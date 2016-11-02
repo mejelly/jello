@@ -1,0 +1,2 @@
+module TranslationPageHelper
+end

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'translation_page/index'
+
   resources :translations
   resources :articles
   root 'landing_page#home'

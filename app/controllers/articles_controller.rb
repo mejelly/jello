@@ -1,20 +1,27 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy]
+  before_action :authenticate_user!#, only: [:new, :edit, :update, :destroy]
       # GET /articles
   # GET /articles.json
+  def getUserInfo
+    @user = current_user
+  end
+
   def index
     @articles = Article.all
+    getUserInfo
   end
 
   # GET /articles/1
   # GET /articles/1.json
   def show
+    getUserInfo
   end
 
   # GET /articles/new
   def new
     @article = Article.new
+    getUserInfo
   end
 
   # GET /articles/1/edit
