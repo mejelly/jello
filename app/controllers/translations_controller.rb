@@ -61,12 +61,19 @@ class TranslationsController < ApplicationController
       req.body = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'+ translationContent +'"}}}'
     end
 
-
     response_json = JSON.parse(response.body)
     current_gist_id = response_json['id']
-    articleSentence = params[:articleSentence]
+    article_section = params[:articleSentence]
     user_id = current_user[:uid]
-    @translation = Translation.new(article_id:article_id, user_id: user_id, status: true, article_section: articleSentence, translation_section:[], gist_id: current_gist_id)
+    i = 0
+    translation_section=[]
+    @article_json = createSequenceJson(translationContent)
+    JSON.parse(@article_json).each do |line|
+      translation_section[i]=line[0]
+      i +=1
+    end
+
+    @translation = Translation.new(article_id:article_id, user_id: user_id, status: true, article_section: article_section, translation_section:translation_section, gist_id: current_gist_id)
     if @translation.save
       redirect_to '/'
     else
@@ -115,24 +122,29 @@ class TranslationsController < ApplicationController
   def edit
   end
 
+  def createSequenceJson(inputText)
+    article_arr = inputText.split('.')
+    i=0
+    temp_json='{'
+    article_arr.each do |item|
+      if(i>0)
+        temp_json += ','
+      end
+      i=i+1
+      # temp_json += "\"" +article_id + user_id + i.to_s + "\":\"" + item + "\""
+      temp_json += "\"" + i.to_s + "\":\"" + item + "\""
+    end
+    temp_json +='}'
+    #@article_json=temp_json
+
+  end
+
   def translate
     @translatedText=cookies[:translatedText]
     @article_id = params[:article_id]
     user_id = params[:user_id]
     @originalArticle=Article.find_by(user_id: user_id, id: @article_id)
-    article_arr = @originalArticle.content.split('.')
-    i=0
-    temp='{'
-    article_arr.each do |item|
-       if(i>0)
-         temp = temp +','
-       end
-       i=i+1
-     # temp += "\"" +article_id + user_id + i.to_s + "\":\"" + item + "\""
-       temp += "\"" + i.to_s + "\":\"" + item + "\""
-    end
-    temp +='}'
-    @article_json=temp
+    @article_json = createSequenceJson(@originalArticle.content)
   end
 
   def saveGist
