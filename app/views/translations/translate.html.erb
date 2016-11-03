@@ -23,7 +23,7 @@
 </script>
 <%= form_tag("/createGist", method: "get", class: "") do %>
 <div class="col-lg-6" id="originalArticle">
-  <% #@originalArticle.content
+  <%
      JSON.parse(@article_json).each do |sentence|
      %>
       <div><label><input type="checkbox" name="articleSentence[]" id="articleSentence<%=sentence[0]%>" value="<%=sentence[0]%>" ><%= sentence[1] %>.</label></div>
@@ -35,10 +35,8 @@
 
   <div class="form-group row">
     <%= hidden_field_tag 'article_id', @article_id %>
+    <%= hidden_field_tag 'user_id', @user_id %>
     <%= text_area_tag('translateHere', @translatedText) %>
-    <!--<textarea class="" id="translateHere" name="translateHere" >-->
-      <!--<%= @translatedText%>-->
-    <!--</textarea>-->
     <div class="actions">
       <%= submit_tag %>
     </div>

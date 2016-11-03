@@ -4,18 +4,22 @@ class TranslationsController < ApplicationController
   before_action :gist, only: [:createGist, :updateGist]
   # GET /translations
   # GET /translations.json
-  
+
+  def gistConnection(url)
+    conn = Faraday.new(url: url ) do |faraday|
+      faraday.request  :url_encoded             # form-encode POST params
+      faraday.response :logger                  # log requests to STDOUT
+      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+    end
+  end
+
   def gist
     #Initial part
     client_id = ENV['AUTH0_CLIENT_ID']
     client_id_secret = ENV['AUTH0_CLIENT_SECRET']
     user_id = URI.encode(session[:userinfo][:extra][:raw_info][:user_id])
 
-    conn = Faraday.new(url: 'https://mejelly.eu.auth0.com') do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger                  # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
+    conn = gistConnection('https://mejelly.eu.auth0.com')
 
     req_body = "{ \"client_id\": \"#{client_id}\", \"client_secret\": \"#{client_id_secret}\", \"audience\": \"https://mejelly.eu.auth0.com/api/v2/\", \"grant_type\": \"client_credentials\" }"
     auth0_token = conn.post do |req|
@@ -26,11 +30,6 @@ class TranslationsController < ApplicationController
 
     auth0_token = JSON.parse(auth0_token.body)['access_token']
 
-    conn = Faraday.new(url: 'https://mejelly.eu.auth0.com') do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger                  # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
 
     github_resp = conn.get do |req|
       req.url "/api/v2/users/#{user_id}"
@@ -43,16 +42,29 @@ class TranslationsController < ApplicationController
 
   end
 
+  #FETCH GIST
+  def fetchGist(gist_id)
+    gist
+    puts '--------'
+    puts @github_token
+    conn = gistConnection('https://api.github.com')
+    response = conn.get do |req|
+      req.url "/gists/#{gist_id}"
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['Authorization'] = "token #{@github_token}"
+     #req.body = patch_body
+      puts '----->>>>'
+    end
+    puts response.body
+
+  end
+
   #CREATE GIST
   def createGist
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br>")
     @article_id = params[:article_id]
     filename = @article_id + Time.now.to_i.to_s
-    conn = Faraday.new(url: 'https://api.github.com') do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger                  # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
+    conn = gistConnection('https://api.github.com')
 
     response = conn.post do |req|
       req.url '/gists'
@@ -64,7 +76,8 @@ class TranslationsController < ApplicationController
     response_json = JSON.parse(response.body)
     current_gist_id = response_json['id']
     article_section = params[:articleSentence]
-    @user_id = current_user[:uid]
+    #@user_id = current_user[:uid]
+    @user_id = params[:user_id]
     i = 0
     translation_section=[]
     @article_json = createSequenceJson(translationContent)
@@ -84,12 +97,7 @@ class TranslationsController < ApplicationController
 
   #UPDATE edited Gist
   def updateGist
-    conn = Faraday.new(url: 'https://api.github.com') do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger                  # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
-
+    conn = gistConnection('https://api.github.com')
     gist_id = '7bf8be959eaf68ee5f4ff135bf1c874a'
     patch_body = '{ "description": "updated gist", "public": true, "files": { "5mejellytest.txt": { "filename": "9005mejellytest.txt", "content": "String file contents are now updated" } } }'
     response = conn.patch do |req|
@@ -142,6 +150,14 @@ class TranslationsController < ApplicationController
     @article_id = params[:article_id]
     @user_id = params[:user_id]
     @originalArticle=Article.find_by(user_id: @user_id, id: @article_id)
+
+    check_translation = Translation.order('id').limit(1).find_by(user_id: @user_id, article_id: @article_id)
+
+    if(!check_translation.nil?)
+      gist_id = check_translation.gist_id
+      fetchGist(gist_id)
+    end
+
     @article_json = createSequenceJson(@originalArticle.content)
   end
 
