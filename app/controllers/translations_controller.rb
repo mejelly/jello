@@ -46,7 +46,8 @@ class TranslationsController < ApplicationController
   #CREATE GIST
   def createGist
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br>")
-    filename = params[:article_id] + Time.now.to_i.to_s
+    article_id = params[:article_id]
+    filename = article_id + Time.now.to_i.to_s
     conn = Faraday.new(url: 'https://api.github.com') do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
       faraday.response :logger                  # log requests to STDOUT
@@ -59,7 +60,18 @@ class TranslationsController < ApplicationController
       req.headers['Authorization'] = "token #{@github_token}"
       req.body = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'+ translationContent +'"}}}'
     end
-    redirect_to '/'
+
+
+    response_json = JSON.parse(response.body)
+    current_gist_id = response_json['id']
+    articleSentence = params[:articleSentence]
+    user_id = current_user[:uid]
+    @translation = Translation.new(article_id:article_id, user_id: user_id, status: true, article_section: articleSentence, translation_section:[], gist_id: current_gist_id)
+    if @translation.save
+      redirect_to '/'
+    else
+      puts '-----------fail------------'
+    end
 
   end
 
@@ -80,7 +92,7 @@ class TranslationsController < ApplicationController
       req.body = patch_body
     end
 
-    puts response.body
+    #puts response.body
 
     redirect_to '/'
   end
