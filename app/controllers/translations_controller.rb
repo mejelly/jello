@@ -46,8 +46,8 @@ class TranslationsController < ApplicationController
   #CREATE GIST
   def createGist
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br>")
-    article_id = params[:article_id]
-    filename = article_id + Time.now.to_i.to_s
+    @article_id = params[:article_id]
+    filename = @article_id + Time.now.to_i.to_s
     conn = Faraday.new(url: 'https://api.github.com') do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
       faraday.response :logger                  # log requests to STDOUT
@@ -64,7 +64,7 @@ class TranslationsController < ApplicationController
     response_json = JSON.parse(response.body)
     current_gist_id = response_json['id']
     article_section = params[:articleSentence]
-    user_id = current_user[:uid]
+    @user_id = current_user[:uid]
     i = 0
     translation_section=[]
     @article_json = createSequenceJson(translationContent)
@@ -73,7 +73,7 @@ class TranslationsController < ApplicationController
       i +=1
     end
 
-    @translation = Translation.new(article_id:article_id, user_id: user_id, status: true, article_section: article_section, translation_section:translation_section, gist_id: current_gist_id)
+    @translation = Translation.new(article_id:@article_id, user_id: @user_id, status: true, article_section: article_section, translation_section:translation_section, gist_id: current_gist_id)
     if @translation.save
       redirect_to '/'
     else
@@ -131,19 +131,17 @@ class TranslationsController < ApplicationController
         temp_json += ','
       end
       i=i+1
-      # temp_json += "\"" +article_id + user_id + i.to_s + "\":\"" + item + "\""
-      temp_json += "\"" + i.to_s + "\":\"" + item + "\""
+      temp_json += "\"" + @article_id + @user_id + i.to_s + "\":\"" + item + "\""
     end
     temp_json +='}'
-    #@article_json=temp_json
 
   end
 
   def translate
     @translatedText=cookies[:translatedText]
     @article_id = params[:article_id]
-    user_id = params[:user_id]
-    @originalArticle=Article.find_by(user_id: user_id, id: @article_id)
+    @user_id = params[:user_id]
+    @originalArticle=Article.find_by(user_id: @user_id, id: @article_id)
     @article_json = createSequenceJson(@originalArticle.content)
   end
 

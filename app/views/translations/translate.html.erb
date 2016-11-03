@@ -1,16 +1,14 @@
 <script>
   $(function() {
-   // $("#translateHere").linedtextarea();
+    $("#translateHere").linedtextarea();
     $('input[type=checkbox]').change(function(e) {
-      var current = parseInt($(this).val());
-      var prevline = current-1;
-      var nextline = current + 1;
-
-      if($('#articleSentence'+nextline+'[type=checkbox]').is(':checked'))
+      var parentdiv = $(this).closest('div');
+      var prev = parentdiv.prev().find('[type=checkbox]')
+      if(parentdiv.next().find('[type=checkbox]').is(':checked'))
       {
         $(this).prop("checked", true);
       }
-      else if($('#articleSentence'+prevline+'[type=checkbox]').is(':checked') || prevline<=0)
+      else if(prev.is(':checked') || prev.length==0)
       {
         $(this).parent().toggleClass('highlightOriginal');
       }
