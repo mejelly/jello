@@ -1,6 +1,6 @@
 <script>
   $(function() {
-    $("#translateHere").linedtextarea();
+   // $("#translateHere").linedtextarea();
     $('input[type=checkbox]').change(function(e) {
       var current = parseInt($(this).val());
       var prevline = current-1;
@@ -18,8 +18,8 @@
       {
         $(this).removeAttr('checked');
       }
-    });
 
+    });
   });
 
 </script>
@@ -33,11 +33,13 @@
   %>
 </div>
 <div class="col-lg-6">
-  <%= form_tag("/saveGist", method: "get", class: "nifty_form") do %>
+  <%= form_tag("/createGist", method: "get", class: "") do %>
   <div class="form-group row">
-    <textarea class="" id="translateHere" name="translateHere" >
-      <%= @translatedText%>
-    </textarea>
+    <%= hidden_field_tag 'article_id', @article_id %>
+    <%= text_area_tag('translateHere', @translatedText) %>
+    <!--<textarea class="" id="translateHere" name="translateHere" >-->
+      <!--<%= @translatedText%>-->
+    <!--</textarea>-->
     <div class="actions">
       <%= submit_tag %>
     </div>
