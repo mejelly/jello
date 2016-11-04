@@ -20,31 +20,43 @@
     });
   });
 
+  function getCurrentPath() {
+    var pathname = window.location.href;
+    pathname=pathname.split('#');
+    return pathname;
+  }
+  $(window).on('hashchange', function(e){
+    $("[name='hightlight_key']").val(getCurrentPath()[1]);
+  });
+  $(window).ready(function() { //alert(1)
+    <% if(!@article_section.nil?) %>
+    if(getCurrentPath()[1] === undefined) {
+      var url = getCurrentPath()[0] + "&r=" + $.now() + "#<%= @article_section %>";
+        location.href = url
+    }
+    <% end %>
+  });
+
+
 </script>
 <%= form_tag("/createGist", method: "get", class: "") do %>
 <div class="col-lg-6" id="originalArticle">
-  <%
-     JSON.parse(@article_json).each do |sentence|
-     %>
-      <%
-        check = ''
-        highlight = ''
+  <div id="article-content">
+    <p>
+    <%=
+      @originalArticle.content
+    %>
+    </p>
+  </div>
 
-        if(@article_section.count(sentence[0])>0)
-          check = "checked=checked"
-          highlight = "highlightOriginal"
-        end
-      %>
-           <div><label class="<%=highlight%> "><input type="checkbox" name="articleSentence[]" id="<%=sentence[0]%>" value="<%=sentence[0]%>" <%= check %> ><%= sentence[1] %>.</label></div>
-      <%
-      end
-  %>
+
 </div>
 <div class="col-lg-6">
 
   <div class="form-group row">
     <%= hidden_field_tag 'article_id', @article_id %>
     <%= hidden_field_tag 'user_id', @user_id %>
+    <%= hidden_field_tag 'hightlight_key' %>
     <%= text_area_tag('translateHere', @translatedText) %>
     <div class="actions">
       <%= submit_tag %>

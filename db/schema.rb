@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20161103063626) do
     t.integer  "article_id"
     t.string   "user_id"
     t.boolean  "status"
-    t.string   "article_section",                  array: true
+    t.string   "article_section"
     t.string   "translation_section",              array: true
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false

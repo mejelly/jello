@@ -17,7 +17,7 @@
     <div class="form-group row">
         <label for="articleTitle" class="col-sm-2 col-form-label">user_id</label>
         <div class="col-sm-10">
-          <%= f.text_field :user_id, class: 'form-control'%>
+          <%= f.text_field :user_id, :value => @user[:extra][:raw_info][:user_id],  class: 'form-control' %>
         </div>
     </div>
 
