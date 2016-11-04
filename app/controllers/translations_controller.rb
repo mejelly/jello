@@ -45,8 +45,6 @@ class TranslationsController < ApplicationController
   #FETCH GIST
   def fetchGist(gist_id)
     gist
-    puts '--->'
-    puts gist_id
     conn = gistConnection('https://api.github.com')
     response = conn.get do |req|
       req.url "/gists/#{gist_id}"
@@ -78,10 +76,6 @@ class TranslationsController < ApplicationController
 
     response_json = JSON.parse(response.body)
     current_gist_id = response_json['id']
-    puts 'gist id---->'
-    puts current_gist_id
-
-
     article_section_hkey = params[:hightlight_key] # params[:articleSentence]
     #@user_id = current_user[:uid]
     @user_id = params[:user_id]
@@ -113,8 +107,6 @@ class TranslationsController < ApplicationController
       req.headers['Authorization'] = "token #{@github_token}"
       req.body = patch_body
     end
-
-    #puts response.body
 
     redirect_to '/'
   end
@@ -160,12 +152,8 @@ class TranslationsController < ApplicationController
     @originalArticle=Article.find_by(user_id: @user_id, id: @article_id)
 
     check_translation = Translation.order('id').limit(1).find_by(user_id: @user_id, article_id: @article_id)
-    puts check_translation
     if(!check_translation.nil?)
       gist_id = check_translation.gist_id
-      puts '********'
-      puts gist_id
-      puts check_translation
       @article_section = check_translation.article_section
       translation_section = check_translation.translation_section
       fetchGist(gist_id)

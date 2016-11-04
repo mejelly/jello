@@ -1,23 +1,23 @@
 <script>
   $(function() {
     $("#translateHere").linedtextarea();
-    $('input[type=checkbox]').change(function(e) {
-      var parentdiv = $(this).closest('div');
-      var prev = parentdiv.prev().find('[type=checkbox]')
-      if(parentdiv.next().find('[type=checkbox]').is(':checked'))
-      {
-        $(this).prop("checked", true);
-      }
-      else if(prev.is(':checked') || prev.length==0)
-      {
-        $(this).parent().toggleClass('highlightOriginal');
-      }
-      else
-      {
-        $(this).removeAttr('checked');
-      }
-
-    });
+//    $('input[type=checkbox]').change(function(e) {
+//      var parentdiv = $(this).closest('div');
+//      var prev = parentdiv.prev().find('[type=checkbox]')
+//      if(parentdiv.next().find('[type=checkbox]').is(':checked'))
+//      {
+//        $(this).prop("checked", true);
+//      }
+//      else if(prev.is(':checked') || prev.length==0)
+//      {
+//        $(this).parent().toggleClass('highlightOriginal');
+//      }
+//      else
+//      {
+//        $(this).removeAttr('checked');
+//      }
+//
+//    });
   });
 
   function getCurrentPath() {

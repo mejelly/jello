@@ -19,18 +19,13 @@ class ArticlesController < ApplicationController
   def show
     getUserInfo
     @temp = Translation.select("translations.*, articles.*").joins(:article).where(user_id:@user[:extra][:raw_info][:user_id]).where(article_id:params[:id]).limit(1)
-    puts '-->'
-    puts @temp.length
-
     if(@temp.length>0)
       @temp.each do |item|
        @article=item
       end
     else
       set_article
-
     end
-
 
   end
 
