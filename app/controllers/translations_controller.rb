@@ -45,54 +45,58 @@ class TranslationsController < ApplicationController
   #FETCH GIST
   def fetchGist(gist_id)
     gist
-    puts '--------'
-    puts @github_token
     conn = gistConnection('https://api.github.com')
     response = conn.get do |req|
       req.url "/gists/#{gist_id}"
       req.headers['Content-Type'] = 'application/json'
       req.headers['Authorization'] = "token #{@github_token}"
      #req.body = patch_body
-      puts '----->>>>'
     end
-    puts response.body
+    temp = JSON.parse(response.body)['files']
+    temp.each do |key, value|
+      @translatedText = value['content']
+    end
 
   end
 
   #CREATE GIST
   def createGist
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br>")
-    @article_id = params[:article_id]
-    filename = @article_id + Time.now.to_i.to_s
-    conn = gistConnection('https://api.github.com')
+    puts '---->'
+    puts translationContent.length
 
-    response = conn.post do |req|
-      req.url '/gists'
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "token #{@github_token}"
-      req.body = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'+ translationContent +'"}}}'
-    end
-
-    response_json = JSON.parse(response.body)
-    current_gist_id = response_json['id']
-    article_section = params[:articleSentence]
-    #@user_id = current_user[:uid]
-    @user_id = params[:user_id]
-    i = 0
-    translation_section=[]
-    @article_json = createSequenceJson(translationContent)
-    JSON.parse(@article_json).each do |line|
-      translation_section[i]=line[0]
-      i +=1
-    end
-
-    @translation = Translation.new(article_id:@article_id, user_id: @user_id, status: true, article_section: article_section, translation_section:translation_section, gist_id: current_gist_id)
-    if @translation.save
-      redirect_to '/'
-    else
-      puts '-----------fail------------'
-    end
-
+    # @article_id = params[:article_id]
+    # filename = @article_id + Time.now.to_i.to_s
+    # conn = gistConnection('https://api.github.com')
+    #
+    # response = conn.post do |req|
+    #   req.url '/gists'
+    #   req.headers['Content-Type'] = 'application/json'
+    #   req.headers['Authorization'] = "token #{@github_token}"
+    #   req.body = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'+ translationContent +'"}}}'
+    # end
+    #
+    # response_json = JSON.parse(response.body)
+    # current_gist_id = response_json['id']
+    # article_section = params[:articleSentence]
+    # #@user_id = current_user[:uid]
+    # @user_id = params[:user_id]
+    # i = 0
+    # translation_section=[]
+    #
+    # @article_json = createSequenceJson(translationContent)
+    # JSON.parse(@article_json).each do |line|
+    #   translation_section[i]=line[0]
+    #   i +=1
+    # end
+    #
+    # @translation = Translation.new(article_id:@article_id, user_id: @user_id, status: true, article_section: article_section, translation_section:translation_section, gist_id: current_gist_id)
+    # if @translation.save
+    #   redirect_to '/'
+    # else
+    #   puts '-----------fail------------'
+    # end
+    redirect_to '/'
   end
 
   #UPDATE edited Gist
@@ -146,7 +150,7 @@ class TranslationsController < ApplicationController
   end
 
   def translate
-    @translatedText=cookies[:translatedText]
+   # @translatedText=cookies[:translatedText]
     @article_id = params[:article_id]
     @user_id = params[:user_id]
     @originalArticle=Article.find_by(user_id: @user_id, id: @article_id)
@@ -156,6 +160,9 @@ class TranslationsController < ApplicationController
     if(!check_translation.nil?)
       gist_id = check_translation.gist_id
       fetchGist(gist_id)
+      @article_section = check_translation.article_section
+      translation_section = check_translation.translation_section
+      puts @article_section
     end
 
     @article_json = createSequenceJson(@originalArticle.content)
