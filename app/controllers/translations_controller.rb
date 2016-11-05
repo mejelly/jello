@@ -19,9 +19,7 @@ class TranslationsController < ApplicationController
     client_id = ENV['AUTH0_CLIENT_ID']
     client_id_secret = ENV['AUTH0_CLIENT_SECRET']
     user_id = URI.encode(session[:userinfo][:extra][:raw_info][:user_id])
-
     conn = gistConnection('https://mejelly.eu.auth0.com')
-
     req_body = "{ \"client_id\": \"#{client_id}\", \"client_secret\": \"#{client_id_secret}\", \"audience\": \"https://mejelly.eu.auth0.com/api/v2/\", \"grant_type\": \"client_credentials\" }"
     auth0_token = conn.post do |req|
       req.url '/oauth/token'
@@ -144,20 +142,20 @@ class TranslationsController < ApplicationController
   def edit
   end
 
-  def createSequenceJson(inputText)
-    article_arr = inputText.split('.')
-    i=0
-    temp_json='{'
-    article_arr.each do |item|
-      if(i>0)
-        temp_json += ','
-      end
-      i=i+1
-      temp_json += "\"" + @article_id + @user_id + i.to_s + "\":\"" + item + "\""
-    end
-    temp_json +='}'
-
-  end
+  # def createSequenceJson(inputText)
+  #   article_arr = inputText.split('.')
+  #   i=0
+  #   temp_json='{'
+  #   article_arr.each do |item|
+  #     if(i>0)
+  #       temp_json += ','
+  #     end
+  #     i=i+1
+  #     temp_json += "\"" + @article_id + @user_id + i.to_s + "\":\"" + item + "\""
+  #   end
+  #   temp_json +='}'
+  #
+  # end
 
   def translate
    # @translatedText=cookies[:translatedText]
@@ -173,7 +171,7 @@ class TranslationsController < ApplicationController
       fetchGist(@current_gist_id)
     end
 
-    @article_json = createSequenceJson(@originalArticle.content)
+    #@article_json = createSequenceJson(@originalArticle.content)
   end
 
   # def saveGist
