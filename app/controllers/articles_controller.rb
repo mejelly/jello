@@ -18,10 +18,10 @@ class ArticlesController < ApplicationController
   # GET /articles/1.jso
   def show
     getUserInfo
-    @temp = Translation.select("translations.*, articles.*").joins(:article).where(user_id:@user[:extra][:raw_info][:user_id]).where(article_id:params[:id]).limit(1)
+    @temp = Translation.order('translations.id DESC').select("translations.*, articles.*").joins(:article).where(user_id:@user[:extra][:raw_info][:user_id]).where(article_id:params[:id]).limit(1)
     if(@temp.length>0)
       @temp.each do |item|
-       @article=item
+        @article=item
       end
     else
       set_article

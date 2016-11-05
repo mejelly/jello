@@ -22,8 +22,9 @@
 
   function getCurrentPath() {
     var pathname = window.location.href;
+    var tscheck = pathname.split('ts');
     pathname=pathname.split('#');
-    return pathname;
+    return [tscheck[0],pathname[1]];
   }
   $(window).on('hashchange', function(e){
     $("[name='hightlight_key']").val(getCurrentPath()[1]);
@@ -31,7 +32,7 @@
   $(window).ready(function() { //alert(1)
     <% if(!@article_section.nil?) %>
     if(getCurrentPath()[1] === undefined) {
-      var url = getCurrentPath()[0] + "&r=" + $.now() + "#<%= @article_section %>";
+      var url = getCurrentPath()[0] + "&ts=" + $.now() + "#<%= @article_section %>";
         location.href = url
     }
     <% end %>
@@ -39,7 +40,17 @@
 
 
 </script>
-<%= form_tag("/createGist", method: "get", class: "") do %>
+<%
+  if(@article_section.nil?)
+    path="/createGist"
+  else
+    path="/updateGist"
+  end
+%>
+<%=
+  form_tag(path, method: "get", class: "") do
+
+%>
 <div class="col-lg-6" id="originalArticle">
   <div id="article-content">
     <p>
@@ -57,7 +68,9 @@
     <%= hidden_field_tag 'article_id', @article_id %>
     <%= hidden_field_tag 'user_id', @user_id %>
     <%= hidden_field_tag 'hightlight_key' %>
-    <%= text_area_tag('translateHere', @translatedText) %>
+    <%= hidden_field_tag 'current_gist_id', @current_gist_id %>
+    <%= hidden_field_tag 'gist_filename', @gist_filename %>
+    <%= text_area_tag('translateHere', @translatedText.gsub('<br />', "\n")) %>
     <div class="actions">
       <%= submit_tag %>
     </div>

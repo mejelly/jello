@@ -10,6 +10,6 @@ Rails.application.routes.draw do
   get 'translate' => 'translations#translate'
   get 'saveGist' => 'translations#saveGist'
   get 'createGist' =>'translations#createGist'
-  get 'upadateGist' =>'translations#updateGist'
+  get 'updateGist' =>'translations#updateGist'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

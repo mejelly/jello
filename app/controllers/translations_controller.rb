@@ -2,6 +2,7 @@ class TranslationsController < ApplicationController
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
   before_action :gist, only: [:createGist, :updateGist]
+  after_action :insertTranslation, only: [:createGist]
   # GET /translations
   # GET /translations.json
 
@@ -55,8 +56,8 @@ class TranslationsController < ApplicationController
     temp = JSON.parse(response.body)['files']
     temp.each do |key, value|
       @translatedText = value['content']
+      @gist_filename = value['filename']
     end
-
   end
 
   #CREATE GIST
@@ -75,40 +76,54 @@ class TranslationsController < ApplicationController
     end
 
     response_json = JSON.parse(response.body)
-    current_gist_id = response_json['id']
-    article_section_hkey = params[:hightlight_key] # params[:articleSentence]
+    @current_gist_id = response_json['id']
+
     #@user_id = current_user[:uid]
-    @user_id = params[:user_id]
-    i = 0
+
+
     translation_section=[]
-
-    @article_json = createSequenceJson(translationContent)
-    JSON.parse(@article_json).each do |line|
-      translation_section[i]=line[0]
-      i +=1
-    end
-
-    @translation = Translation.new(article_id:@article_id, user_id: @user_id, status: true, article_section: article_section_hkey, translation_section:translation_section, gist_id: current_gist_id)
-    if @translation.save
-      redirect_to '/'
+    #i = 0
+    # @article_json = createSequenceJson(translationContent)
+    # JSON.parse(@article_json).each do |line|
+    #   translation_section[i]=line[0]
+    #   i +=1
+    # end
+    insertTranslation
+    if insertTranslation.save
+      redirect_to articles_url
     else
-      puts '-----------fail------------'
+      puts '-----------Fail------------'
     end
+  end
+
+  def insertTranslation
+    @article_section_hkey = params[:hightlight_key] # params[:articleSentence]
+    @user_id = params[:user_id]
+    @translation = Translation.new(article_id:@article_id, user_id: @user_id, status: true, article_section: @article_section_hkey, translation_section:[], gist_id: @current_gist_id)
+
   end
 
   #UPDATE edited Gist
   def updateGist
     conn = gistConnection('https://api.github.com')
-    gist_id = '7bf8be959eaf68ee5f4ff135bf1c874a'
-    patch_body = '{ "description": "updated gist", "public": true, "files": { "5mejellytest.txt": { "filename": "9005mejellytest.txt", "content": "String file contents are now updated" } } }'
+    @current_gist_id = params[:current_gist_id]
+    translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br />")
+    @article_id = params[:article_id]
+    gist_filename = params[:gist_filename]
+    patch_body = '{ "description": "updated gist", "public": true, "files": { "'+ gist_filename +'": { "content": "'+ translationContent +'" } } }'
     response = conn.patch do |req|
-      req.url "/gists/#{gist_id}"
+      req.url "/gists/#{@current_gist_id}"
       req.headers['Content-Type'] = 'application/json'
       req.headers['Authorization'] = "token #{@github_token}"
       req.body = patch_body
     end
 
-    redirect_to '/'
+    insertTranslation
+    if insertTranslation.save
+      redirect_to articles_url
+    else
+      puts '-----------Update Fail------------'
+    end
   end
 
   def index
@@ -146,29 +161,28 @@ class TranslationsController < ApplicationController
 
   def translate
    # @translatedText=cookies[:translatedText]
-
     @article_id = params[:article_id]
     @user_id = params[:user_id]
     @originalArticle=Article.find_by(user_id: @user_id, id: @article_id)
-
-    check_translation = Translation.order('id').limit(1).find_by(user_id: @user_id, article_id: @article_id)
+    check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @user_id, article_id: @article_id)
+    @translatedText = ''
     if(!check_translation.nil?)
-      gist_id = check_translation.gist_id
+      @current_gist_id = check_translation.gist_id
       @article_section = check_translation.article_section
       translation_section = check_translation.translation_section
-      fetchGist(gist_id)
+      fetchGist(@current_gist_id)
     end
 
     @article_json = createSequenceJson(@originalArticle.content)
   end
 
-  def saveGist
-    if (!params[:translateHere].nil? || cookies[:translatedText].to_s!=params[:translateHere].to_s)
-     cookies[:translatedText] = params[:translateHere]
-    end
-    @translatedText=cookies[:translatedText]
-    redirect_to :back
-  end
+  # def saveGist
+  #   if (!params[:translateHere].nil? || cookies[:translatedText].to_s!=params[:translateHere].to_s)
+  #    cookies[:translatedText] = params[:translateHere]
+  #   end
+  #   @translatedText=cookies[:translatedText]
+  #   redirect_to :back
+  # end
 
   # POST /translations
   # POST /translations.json
