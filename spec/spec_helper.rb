@@ -111,3 +111,4 @@ end
 
 Capybara.javascript_driver = :poltergeist
 Capybara.default_driver = :poltergeist
+Capybara.server_port = 59076

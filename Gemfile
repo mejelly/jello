@@ -41,6 +41,9 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'haml-lint', require: false
   gem 'coveralls', require: false
+  gem 'cucumber-rails', :require => false
+  # database_cleaner is not required, but highly recommended
+  gem 'database_cleaner'
 end
 
 group :test do
