@@ -49,7 +49,6 @@
 %>
 <%=
   form_tag(path, method: "get", class: "") do
-
 %>
 <div class="col-lg-6" id="originalArticle">
   <div id="article-content">
@@ -77,4 +76,9 @@
   </div>
 
 </div>
+<% end %>
+<%= form_tag('/addComment', method: "get", class: "") do %>
+    <%= hidden_field_tag 'current_gist_id', @current_gist_id %>
+    <%= text_area_tag('comment') %>
+    <%= submit_tag %>
 <% end %>

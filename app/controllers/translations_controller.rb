@@ -4,6 +4,11 @@ class TranslationsController < ApplicationController
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insertTranslation, only: [:createGist]
 
+  def getUserInfo
+    @user = current_user
+    @currentuserid = @user[:extra][:raw_info][:user_id]
+  end
+
   def create_connection(url)
     Faraday.new(url: url) do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
@@ -91,16 +96,35 @@ class TranslationsController < ApplicationController
 
   def insertTranslation
     @article_section_hkey = params[:hightlight_key] # params[:articleSentence]
-    @user_id = params[:user_id]
+    getUserInfo
     @translation = Translation.new(
       article_id:@article_id,
-      user_id: @user_id,
+      user_id: @currentuserid,
       status: true,
       article_section: @article_section_hkey,
       translation_section:[],
       gist_id: @current_gist_id
     )
   end
+
+  # def add_comment
+  #   conn = create_connection('https://api.github.com')
+  #   @current_gist_id = params[:current_gist_id]
+  #   comment =  params[:comment].gsub(/[\r\n]+/, "<br />")
+  #   #@article_id = params[:article_id]
+  #   article_comment = '{ "body": "'+comment+'"}'
+  #   response = conn.post do |req|
+  #     req.url "/gists/#{@current_gist_id}/comments"
+  #     req.headers['Content-Type'] = 'application/json'
+  #     req.headers['Authorization'] = "token #{@github_token}"
+  #     req.body = article_comment
+  #   end
+  #   puts article_comment
+  #   puts '+=+++++++='
+  #   puts response.body
+  #   redirect_to :back
+  #
+  # end
 
   #UPDATE edited Gist
   def updateGist
@@ -160,9 +184,10 @@ class TranslationsController < ApplicationController
 
   def translate
     @article_id = params[:article_id]
-    @user_id = params[:user_id]
-    @originalArticle = Article.find_by(user_id: @user_id, id: @article_id)
-    check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @user_id, article_id: @article_id)
+    @originalArticle = Article.find_by(id: @article_id)
+    getUserInfo
+    check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @currentuserid , article_id: @article_id)
+
     @translatedText = ''
     if(!check_translation.nil?)
       @current_gist_id = check_translation.gist_id
