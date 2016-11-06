@@ -1,6 +1,6 @@
 class TranslationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :connect_gist, only: [:createGist, :updateGist]
+  before_action :get_github_token, only: [:createGist, :updateGist]
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insertTranslation, only: [:createGist]
 
@@ -12,7 +12,7 @@ class TranslationsController < ApplicationController
     end
   end
 
-  def connect_auth0(conn)
+  def get_auth0_token(conn)
     req_body = "{ \"client_id\": \"#{ENV['AUTH0_CLIENT_ID']}\","
     req_body += " \"client_secret\": \"#{ENV['AUTH0_CLIENT_SECRET']}\", "
     req_body += '"audience": "https://mejelly.eu.auth0.com/api/v2/", "grant_type": "client_credentials" }'
@@ -23,31 +23,25 @@ class TranslationsController < ApplicationController
     end
   end
 
-  def connect_gist
+  def connect_github
     conn = create_connection('https://mejelly.eu.auth0.com')
-    auth0_token = JSON.parse(connect_auth0(conn).body)['access_token']
-    user_id = URI.encode(session[:userinfo][:extra][:raw_info][:user_id])
-    github_resp = conn.get do |req|
-      req.url "/api/v2/users/#{user_id}"
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{auth0_token}"
-    end
-
-    @github_token = JSON.parse(github_resp.body)['identities'][0]['access_token']
+    conn.headers = { 'Authorization': "Bearer #{JSON.parse(get_auth0_token(conn).body)['access_token'] }" }
+    url = "/api/v2/users/#{URI.encode(session[:userinfo][:extra][:raw_info][:user_id]) }"
+    conn.get(url)
   end
 
-  #FETCH GIST
+  def get_github_token
+    @github_token = JSON.parse(connect_github.body)['identities'][0]['access_token']
+  end
+
   def fetchGist(gist_id)
-    connect_gist
+    get_github_token
     conn = create_connection('https://api.github.com')
-    response = conn.get do |req|
-      req.url "/gists/#{gist_id}"
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "token #{@github_token}"
-      # req.body = patch_body
-    end
-    temp = JSON.parse(response.body)['files']
-    temp.each do |key, value|
+    conn.headers = {
+      'Authorization': "token #{@github_token}"
+    }
+    url = "/gists/#{gist_id}"
+    JSON.parse(conn.get(url).body)['files'].each do |key, value|
       @translatedText = value['content']
       @gist_filename = value['filename']
     end
@@ -55,33 +49,26 @@ class TranslationsController < ApplicationController
 
   #CREATE GIST
   def createGist
-
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br>")
     @article_id = params[:article_id]
+    response = post_to_gist(translationContent)
+    @current_gist_id = JSON.parse(response.body)['id']
+    insertTranslation
+    redirect_after_create
+  end
+
+  def post_to_gist(translation_content)
     filename = @article_id + Time.now.to_i.to_s
     conn = create_connection('https://api.github.com')
+    conn.headers = {
+      'Authorization': "token #{@github_token}"
+    }
+    payload = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'
+    payload += translation_content + '"}}}'
+    conn.post('/gists', payload)
+  end
 
-    response = conn.post do |req|
-      req.url '/gists'
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "token #{@github_token}"
-      req.body = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'
-      req.body += translationContent + '"}}}'
-    end
-
-    response_json = JSON.parse(response.body)
-    @current_gist_id = response_json['id']
-
-    #@user_id = current_user[:uid]
-
-    translation_section=[]
-    #i = 0
-    # @article_json = createSequenceJson(translationContent)
-    # JSON.parse(@article_json).each do |line|
-    #   translation_section[i]=line[0]
-    #   i +=1
-    # end
-    insertTranslation
+  def redirect_after_create
     if insertTranslation.save
       redirect_to articles_url
     else
