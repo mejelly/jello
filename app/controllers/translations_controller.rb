@@ -13,7 +13,10 @@ class TranslationsController < ApplicationController
   end
 
   def connect_auth0(conn)
-    auth0_token = conn.post do |req|
+    req_body = "{ \"client_id\": \"#{ENV['AUTH0_CLIENT_ID']}\","
+    req_body += " \"client_secret\": \"#{ENV['AUTH0_CLIENT_SECRET']}\", "
+    req_body += '"audience": "https://mejelly.eu.auth0.com/api/v2/", "grant_type": "client_credentials" }'
+    conn.post do |req|
       req.url '/oauth/token'
       req.headers['Content-Type'] = 'application/json'
       req.body = req_body
@@ -21,24 +24,13 @@ class TranslationsController < ApplicationController
   end
 
   def connect_gist
-    req_body = "{ \"client_id\": \"#{ENV['AUTH0_CLIENT_ID']}\","
-    req_body += " \"client_secret\": \"#{ENV['AUTH0_CLIENT_SECRET']}\", "
-    req_body += '\"audience\": \"https://mejelly.eu.auth0.com/api/v2/\", \"grant_type\": \"client_credentials\" }"'
     conn = create_connection('https://mejelly.eu.auth0.com')
-    connect_auth0(conn)
-    auth0_token = conn.post do |req|
-      req.url '/oauth/token'
-      req.headers['Content-Type'] = 'application/json'
-      req.body = req_body
-    end
-
+    auth0_token = JSON.parse(connect_auth0(conn).body)['access_token']
     user_id = URI.encode(session[:userinfo][:extra][:raw_info][:user_id])
-    auth0_token = JSON.parse(auth0_token.body)['access_token']
     github_resp = conn.get do |req|
       req.url "/api/v2/users/#{user_id}"
       req.headers['Content-Type'] = 'application/json'
       req.headers['Authorization'] = "Bearer #{auth0_token}"
-      req.body = req_body
     end
 
     @github_token = JSON.parse(github_resp.body)['identities'][0]['access_token']
