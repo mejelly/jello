@@ -1,35 +1,39 @@
 class TranslationsController < ApplicationController
-  before_action :set_translation, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
-  before_action :gist, only: [:createGist, :updateGist]
+  before_action :connect_gist, only: [:createGist, :updateGist]
+  before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insertTranslation, only: [:createGist]
-  # GET /translations
-  # GET /translations.json
 
-  def gistConnection(url)
-    conn = Faraday.new(url: url ) do |faraday|
+  def create_connection(url)
+    Faraday.new(url: url) do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
       faraday.response :logger                  # log requests to STDOUT
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
   end
 
-  def gist
-    #Initial part
-    client_id = ENV['AUTH0_CLIENT_ID']
-    client_id_secret = ENV['AUTH0_CLIENT_SECRET']
-    user_id = URI.encode(session[:userinfo][:extra][:raw_info][:user_id])
-    conn = gistConnection('https://mejelly.eu.auth0.com')
-    req_body = "{ \"client_id\": \"#{client_id}\", \"client_secret\": \"#{client_id_secret}\", \"audience\": \"https://mejelly.eu.auth0.com/api/v2/\", \"grant_type\": \"client_credentials\" }"
+  def connect_auth0(conn)
+    auth0_token = conn.post do |req|
+      req.url '/oauth/token'
+      req.headers['Content-Type'] = 'application/json'
+      req.body = req_body
+    end
+  end
+
+  def connect_gist
+    req_body = "{ \"client_id\": \"#{ENV['AUTH0_CLIENT_ID']}\","
+    req_body += " \"client_secret\": \"#{ENV['AUTH0_CLIENT_SECRET']}\", "
+    req_body += '\"audience\": \"https://mejelly.eu.auth0.com/api/v2/\", \"grant_type\": \"client_credentials\" }"'
+    conn = create_connection('https://mejelly.eu.auth0.com')
+    connect_auth0(conn)
     auth0_token = conn.post do |req|
       req.url '/oauth/token'
       req.headers['Content-Type'] = 'application/json'
       req.body = req_body
     end
 
+    user_id = URI.encode(session[:userinfo][:extra][:raw_info][:user_id])
     auth0_token = JSON.parse(auth0_token.body)['access_token']
-
-
     github_resp = conn.get do |req|
       req.url "/api/v2/users/#{user_id}"
       req.headers['Content-Type'] = 'application/json'
@@ -38,18 +42,17 @@ class TranslationsController < ApplicationController
     end
 
     @github_token = JSON.parse(github_resp.body)['identities'][0]['access_token']
-
   end
 
   #FETCH GIST
   def fetchGist(gist_id)
-    gist
-    conn = gistConnection('https://api.github.com')
+    connect_gist
+    conn = create_connection('https://api.github.com')
     response = conn.get do |req|
       req.url "/gists/#{gist_id}"
       req.headers['Content-Type'] = 'application/json'
       req.headers['Authorization'] = "token #{@github_token}"
-     #req.body = patch_body
+      # req.body = patch_body
     end
     temp = JSON.parse(response.body)['files']
     temp.each do |key, value|
@@ -64,20 +67,20 @@ class TranslationsController < ApplicationController
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br>")
     @article_id = params[:article_id]
     filename = @article_id + Time.now.to_i.to_s
-    conn = gistConnection('https://api.github.com')
+    conn = create_connection('https://api.github.com')
 
     response = conn.post do |req|
       req.url '/gists'
       req.headers['Content-Type'] = 'application/json'
       req.headers['Authorization'] = "token #{@github_token}"
-      req.body = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'+ translationContent +'"}}}'
+      req.body = '{"description": "Mejelly Test","public": true,"files": {"'+ filename +'.txt": {"content": "'
+      req.body += translationContent + '"}}}'
     end
 
     response_json = JSON.parse(response.body)
     @current_gist_id = response_json['id']
 
     #@user_id = current_user[:uid]
-
 
     translation_section=[]
     #i = 0
@@ -97,19 +100,25 @@ class TranslationsController < ApplicationController
   def insertTranslation
     @article_section_hkey = params[:hightlight_key] # params[:articleSentence]
     @user_id = params[:user_id]
-    @translation = Translation.new(article_id:@article_id, user_id: @user_id, status: true, article_section: @article_section_hkey, translation_section:[], gist_id: @current_gist_id)
-
+    @translation = Translation.new(
+      article_id:@article_id,
+      user_id: @user_id,
+      status: true,
+      article_section: @article_section_hkey,
+      translation_section:[],
+      gist_id: @current_gist_id
+    )
   end
 
   #UPDATE edited Gist
   def updateGist
-    conn = gistConnection('https://api.github.com')
+    conn = create_connection('https://api.github.com')
     @current_gist_id = params[:current_gist_id]
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br />")
     @article_id = params[:article_id]
-    gist_filename = params[:gist_filename]
-    patch_body = '{ "description": "updated gist", "public": true, "files": { "'+ gist_filename +'": { "content": "'+ translationContent +'" } } }'
-    response = conn.patch do |req|
+    patch_body = '{ "description": "updated gist", "public": true, "files": { "'
+    patch_body += params[:gist_filename] +'": { "content": "' + translationContent +'" } } }'
+    conn.patch do |req|
       req.url "/gists/#{@current_gist_id}"
       req.headers['Content-Type'] = 'application/json'
       req.headers['Authorization'] = "token #{@github_token}"
@@ -158,16 +167,14 @@ class TranslationsController < ApplicationController
   # end
 
   def translate
-   # @translatedText=cookies[:translatedText]
     @article_id = params[:article_id]
     @user_id = params[:user_id]
-    @originalArticle=Article.find_by(user_id: @user_id, id: @article_id)
+    @originalArticle = Article.find_by(user_id: @user_id, id: @article_id)
     check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @user_id, article_id: @article_id)
     @translatedText = ''
     if(!check_translation.nil?)
       @current_gist_id = check_translation.gist_id
       @article_section = check_translation.article_section
-      translation_section = check_translation.translation_section
       fetchGist(@current_gist_id)
     end
 
@@ -232,5 +239,4 @@ class TranslationsController < ApplicationController
     def translation_params
       params.require(:translation).permit(:article_id, :user_id, :status, :article_section, :translation_section)
     end
-
 end
