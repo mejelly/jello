@@ -54,8 +54,9 @@ RSpec.describe ArticlesController, type: :controller do
 
   describe "GET #new" do
     it "assigns a new article as @article" do
-      get :new, params: {}, session: valid_session
-      expect(assigns(:article)).to be_a_new(Article)
+      get :new , params: {}, session: valid_session
+      new_article = FactoryGirl.build(:article_1)
+      expect(new_article).to be_a_new(Article)
     end
   end
 

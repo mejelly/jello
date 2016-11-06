@@ -23,8 +23,8 @@
 <%#=link_to 'Edit', edit_article_path(@article) %>
 <%
   if(defined? @article.article_section)%>
-    <a href="<%= translate_path(article_id: @article.id, user_id: @article.user_id)%>#<%= @article.article_section %>" target="_blank">Translate This Article</a>
+    <a href="<%= translate_path(article_id: @article.id )%>#<%= @article.article_section %>" target="_blank">Translate This Article</a>
 <% else%>
-    <a href="<%= translate_path(article_id: @article.id, user_id: @article.user_id)%>" target="_blank">Translate This Article</a>
+    <a href="<%= translate_path(article_id: @article.id )%>" target="_blank">Translate This Article</a>
 |<% end %>
 <%= link_to 'Back', articles_path %>
