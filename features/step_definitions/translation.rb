@@ -13,7 +13,6 @@ end
 
 When(/^I create a new article$/) do
   click_link 'New Article'
-  fill_in 'article_user_id', with: 'mrteera01'
   fill_in 'article_title', with: 'This is my article'
   fill_in 'article_url', with: 'http://mejello.com'
   fill_in 'article_content', with: 'Hello, there! This is a content yay'
