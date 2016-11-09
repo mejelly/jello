@@ -4,7 +4,7 @@ class TranslationsController < ApplicationController
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insertTranslation, only: [:createGist]
 
-  def getUserInfo
+  def get_user_info
     @user = current_user
     @currentuserid = @user[:extra][:raw_info][:user_id]
   end
@@ -83,7 +83,7 @@ class TranslationsController < ApplicationController
 
   def insertTranslation
     @article_section_hkey = params[:hightlight_key] # params[:articleSentence]
-    getUserInfo
+    get_user_info
     @translation = Translation.new(
       article_id:@article_id,
       user_id: @currentuserid,
@@ -112,28 +112,23 @@ class TranslationsController < ApplicationController
   #   redirect_to :back
   #
   # end
+  def update_gist_payload(translation_content)
+    '{ "description": "updated gist", "public": true, "files": { "' \
+    + params[:gist_filename] +'": { "content": "' + translation_content +'" } } }'
+  end
 
   #UPDATE edited Gist
   def updateGist
-    conn = create_connection('https://api.github.com')
-    @current_gist_id = params[:current_gist_id]
-    translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br />")
     @article_id = params[:article_id]
-    patch_body = '{ "description": "updated gist", "public": true, "files": { "'
-    patch_body += params[:gist_filename] +'": { "content": "' + translationContent +'" } } }'
-    conn.patch do |req|
-      req.url "/gists/#{@current_gist_id}"
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "token #{@github_token}"
-      req.body = patch_body
-    end
-
+    @current_gist_id = params[:current_gist_id]
+    translation_content =  params[:translateHere].gsub(/[\r\n]+/, "<br />")
+    conn = create_connection('https://api.github.com')
+    conn.headers = {
+      Authorization: "token #{@github_token}"
+    }
+    conn.patch("/gists/#{@current_gist_id}", update_gist_payload(translation_content))
     insertTranslation
-    if insertTranslation.save
-      redirect_to articles_url
-    else
-      puts '-----------Update Fail------------'
-    end
+    redirect_after_create
   end
 
   def index
@@ -172,7 +167,7 @@ class TranslationsController < ApplicationController
   def translate
     @article_id = params[:article_id]
     @originalArticle = Article.find_by(id: @article_id)
-    getUserInfo
+    get_user_info
     check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @currentuserid , article_id: @article_id)
 
     @translatedText = ''
