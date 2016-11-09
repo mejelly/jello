@@ -109,4 +109,33 @@
 .linedwrap .codelines .lineselect {
   color: red;
 }
+.commentDiv
+{
+  border: 1px solid #c0c0c0;
+  border-radius: 3px;
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 12px;
+  background: #f4f4f4;
+  .commentBy{
+    font-weight: 500;
+
+    .commentAvator
+    {
+      width: 30px;
+      border-radius: 3px;
+      margin-right: 5px;
+    }
+  }
+  .commentBody
+  {
+    margin-left: 35px;
+  }
+
+}
+#comment
+{
+  width: 100%;
+  padding: 5px;
+}
 /**/

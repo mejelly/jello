@@ -39,13 +39,13 @@ class TranslationsController < ApplicationController
     @github_token = JSON.parse(connect_github.body)['identities'][0]['access_token']
   end
 
-  def fetch_gist(gist_id)
+  def fetch_gist
     get_github_token
     conn = create_connection('https://api.github.com')
     conn.headers = {
       'Authorization': "token #{@github_token}"
     }
-    url = "/gists/#{gist_id}"
+    url = "/gists/#{@current_gist_id}"
     JSON.parse(conn.get(url).body)['files'].each do |key, value|
       @translatedText = value['content']
       @gist_filename = value['filename']
@@ -104,6 +104,16 @@ class TranslationsController < ApplicationController
     payload = '{ "body": "'+comment+'"}'
     conn.post("/gists/#{@current_gist_id}/comments", payload)
     redirect_to :back
+  end
+
+  def list_comments
+    get_github_token
+    conn = create_connection('https://api.github.com')
+    conn.headers = {
+        'Authorization': "token #{@github_token}"
+    }
+    url = "/gists/#{@current_gist_id}/comments"
+    @comments = conn.get(url).body
   end
 
   def update_gist_payload(translation_content)
@@ -168,7 +178,8 @@ class TranslationsController < ApplicationController
     if(!check_translation.nil?)
       @current_gist_id = check_translation.gist_id
       @article_section = check_translation.article_section
-      fetch_gist(@current_gist_id)
+      fetch_gist
+      list_comments
     end
 
     #@article_json = createSequenceJson(@originalArticle.content)
