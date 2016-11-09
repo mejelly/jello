@@ -77,7 +77,7 @@
 
 </div>
 <% end %>
-<%= form_tag('/addComment', method: "get", class: "") do %>
+<%= form_tag('/addcomment', method: "get", class: "") do %>
     <%= hidden_field_tag 'current_gist_id', @current_gist_id %>
     <%= text_area_tag('comment') %>
     <%= submit_tag %>

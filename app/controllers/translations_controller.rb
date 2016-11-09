@@ -1,6 +1,6 @@
 class TranslationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_github_token, only: [:create_gist, :update_gist]
+  before_action :get_github_token, only: [:create_gist, :update_gist, :add_comment]
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insert_translation, only: [:create_gist]
 
@@ -94,24 +94,18 @@ class TranslationsController < ApplicationController
     )
   end
 
-  # def add_comment
-  #   conn = create_connection('https://api.github.com')
-  #   @current_gist_id = params[:current_gist_id]
-  #   comment =  params[:comment].gsub(/[\r\n]+/, "<br />")
-  #   #@article_id = params[:article_id]
-  #   article_comment = '{ "body": "'+comment+'"}'
-  #   response = conn.post do |req|
-  #     req.url "/gists/#{@current_gist_id}/comments"
-  #     req.headers['Content-Type'] = 'application/json'
-  #     req.headers['Authorization'] = "token #{@github_token}"
-  #     req.body = article_comment
-  #   end
-  #   puts article_comment
-  #   puts '+=+++++++='
-  #   puts response.body
-  #   redirect_to :back
-  #
-  # end
+  def add_comment
+    @current_gist_id = params[:current_gist_id]
+    comment =  params[:comment].gsub(/[\r\n]+/, "<br />")
+    conn = create_connection('https://api.github.com')
+    conn.headers = {
+        'Authorization': "token #{@github_token}"
+    }
+    payload = '{ "body": "'+comment+'"}'
+    conn.post("/gists/#{@current_gist_id}/comments", payload)
+    redirect_to :back
+  end
+
   def update_gist_payload(translation_content)
     '{ "description": "updated gist", "public": true, "files": { "' \
     + params[:gist_filename] +'": { "content": "' + translation_content +'" } } }'
