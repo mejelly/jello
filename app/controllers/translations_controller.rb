@@ -1,8 +1,8 @@
 class TranslationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_github_token, only: [:createGist, :updateGist]
+  before_action :get_github_token, only: [:create_gist, :update_gist]
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
-  after_action :insertTranslation, only: [:createGist]
+  after_action :insert_translation, only: [:create_gist]
 
   def get_user_info
     @user = current_user
@@ -39,7 +39,7 @@ class TranslationsController < ApplicationController
     @github_token = JSON.parse(connect_github.body)['identities'][0]['access_token']
   end
 
-  def fetchGist(gist_id)
+  def fetch_gist(gist_id)
     get_github_token
     conn = create_connection('https://api.github.com')
     conn.headers = {
@@ -53,12 +53,12 @@ class TranslationsController < ApplicationController
   end
 
   #CREATE GIST
-  def createGist
+  def create_gist
     translationContent =  params[:translateHere].gsub(/[\r\n]+/, "<br>")
     @article_id = params[:article_id]
     response = post_to_gist(translationContent)
     @current_gist_id = JSON.parse(response.body)['id']
-    insertTranslation
+    insert_translation
     redirect_after_create
   end
 
@@ -74,14 +74,14 @@ class TranslationsController < ApplicationController
   end
 
   def redirect_after_create
-    if insertTranslation.save
+    if insert_translation.save
       redirect_to articles_url
     else
       puts '-----------Fail------------'
     end
   end
 
-  def insertTranslation
+  def insert_translation
     @article_section_hkey = params[:hightlight_key] # params[:articleSentence]
     get_user_info
     @translation = Translation.new(
@@ -118,7 +118,7 @@ class TranslationsController < ApplicationController
   end
 
   #UPDATE edited Gist
-  def updateGist
+  def update_gist
     @article_id = params[:article_id]
     @current_gist_id = params[:current_gist_id]
     translation_content =  params[:translateHere].gsub(/[\r\n]+/, "<br />")
@@ -127,7 +127,7 @@ class TranslationsController < ApplicationController
       Authorization: "token #{@github_token}"
     }
     conn.patch("/gists/#{@current_gist_id}", update_gist_payload(translation_content))
-    insertTranslation
+    insert_translation
     redirect_after_create
   end
 
@@ -174,7 +174,7 @@ class TranslationsController < ApplicationController
     if(!check_translation.nil?)
       @current_gist_id = check_translation.gist_id
       @article_section = check_translation.article_section
-      fetchGist(@current_gist_id)
+      fetch_gist(@current_gist_id)
     end
 
     #@article_json = createSequenceJson(@originalArticle.content)

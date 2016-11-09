@@ -8,8 +8,8 @@ Rails.application.routes.draw do
   get '/auth/failure'        => 'auth0#failure'
 
   get 'translate' => 'translations#translate'
-  get 'saveGist' => 'translations#saveGist'
-  get 'createGist' =>'translations#createGist'
-  get 'updateGist' =>'translations#updateGist'
+  get 'saveGist' => 'translations#save_gist'
+  get 'createGist' =>'translations#create_gist'
+  get 'updateGist' =>'translations#update_gist'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
