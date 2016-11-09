@@ -1,6 +1,7 @@
 <script>
   $(function() {
-    $("#translateHere").linedtextarea();
+    var editor = new MediumEditor('#translateHere');
+    //$("#translateHere").linedtextarea();
 //    $('input[type=checkbox]').change(function(e) {
 //      var parentdiv = $(this).closest('div');
 //      var prev = parentdiv.prev().find('[type=checkbox]')
@@ -88,7 +89,9 @@
 </div>
 
 <div>
-<% JSON.parse(@comments).reverse_each do |value| %>
+<%
+if(!@comments.nil?)
+  JSON.parse(@comments).reverse_each do |value| %>
 
     <div class="commentDiv container-fluid">
       <div class="commentBy">
@@ -97,5 +100,6 @@
       <div class="commentBody"><%=  value['body'] %></div>
 
     </div>
-<% end %>
+<% end
+end %>
 </div>

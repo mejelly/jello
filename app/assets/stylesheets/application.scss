@@ -38,10 +38,11 @@
   }
 }
 
-#translateHere{
+#translateHere,.medium-editor-element{
   width: 100%;
-  min-height: 500px;
+  min-height: 500px !important;
   word-break: break-all;
+  margin-bottom: 10px;
 
 }
 
