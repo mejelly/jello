@@ -1,7 +1,9 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [ :edit, :update, :destroy]
   before_action :authenticate_user!#, only: [:new, :edit, :update, :destroy]
-      # GET /articles
+  before_action :getUserInfo, only: [ :index, :show, :new]
+
+  # GET /articles
   # GET /articles.json
   def getUserInfo
     @user = current_user
@@ -11,14 +13,12 @@ class ArticlesController < ApplicationController
   def index
     @articles = Article.all
     #test= Translation.all
-
-    getUserInfo
   end
 
   # GET /articles/1
   # GET /articles/1.jso
   def show
-    getUserInfo
+
     @temp = Translation.order('translations.id DESC').select("translations.*, articles.*").joins(:article).where("translations.user_id": @currentuserid ).where(article_id:params[:id]).limit(1)
     if(@temp.length>0)
       @temp.each do |item|
@@ -33,7 +33,7 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
-    getUserInfo
+
   end
 
   # GET /articles/1/edit

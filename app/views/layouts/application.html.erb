@@ -29,22 +29,30 @@
   <body>
     <div class="container-fluid" id="pgContainer">
       <div class="row" id="pgHeader">
-        <div class="col-lg-6 col-xs-12">
-         <a href="/">MeJelly</a>
-        </div>
-        <div class="col-lg-6 col-xs-12 text-right">
-          <% if !@user.nil? %>
-           
-              <%= @user[:info][:name] %>
-              <!--img class="avatar" src="<%= @user[:info][:image] %>" width="50"/-->
-              <a href="https://<%= Rails.application.secrets.auth0_domain %>/v2/logout?returnTo=http://localhost:3000/">Logout</a>
-          <% else %>
-            <a  href="javascript:;" onclick="lock.show();">Login</a>
-          <% end %>
-        </div>
-      </div>
+        <div class="contentContainer container-fluid">
+          <div class="row">
+            <div class="col-lg-6 col-xs-12">
+              <a href="/">MeJelly</a>
+            </div>
+            <div class="col-lg-6 col-xs-12 text-right">
+              <% if !@user.nil? %>
 
+                  <%= @user[:info][:name] %>
+                  <!--img class="avatar" src="<%= @user[:info][:image] %>" width="50"/-->
+                  <a href="https://<%= Rails.application.secrets.auth0_domain %>/v2/logout?returnTo=http://localhost:3000/">Logout</a>
+              <% else %>
+                  <a  href="javascript:;" onclick="lock.show();">Login</a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="contentContainer container-fluid">
+        <div class="row">
       <%= yield %>
+          </div>
+        </div>
     </div>
   </body>
 </html>

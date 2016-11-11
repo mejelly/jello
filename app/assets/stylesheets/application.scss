@@ -15,9 +15,12 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+.contentContainer{
+  max-width: 1400px;
+}
 #pgContainer
 {
-  max-width: 1000px;
+
   font-family: 'Roboto', sans-serif;
   h1
   {
