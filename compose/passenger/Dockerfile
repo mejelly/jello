@@ -18,8 +18,8 @@ ENV APPLICATION_ROOT /mejelly
 WORKDIR $APPLICATION_ROOT
 RUN bundle install
 
-COPY mejelly/compose/passenger/entrypoint.sh /entrypoint.sh
-COPY mejelly/compose/passenger/start-dev.sh /start-dev.sh
+COPY compose/passenger/entrypoint.sh /entrypoint.sh
+COPY compose/passenger/start-dev.sh /start-dev.sh
 
 RUN rm -f /etc/service/nginx/down
 RUN rm /etc/nginx/sites-enabled/default
