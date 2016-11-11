@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     ports:
-      - "0.0.0.0:3004:443"
+      - "0.0.0.0:3001:443"
     dns:
       - 8.8.8.8
     environment:
