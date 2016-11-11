@@ -18,7 +18,7 @@ before_install:
   - openssl aes-256-cbc -K $encrypted_9f5b86caa04f_key -iv $encrypted_9f5b86caa04f_iv -in .travis/deploy_rsa.enc -out .travis/deploy_key -d
 before_script:
   - docker build -t $REPO:$COMMIT -f compose/passenger/Dockerfile .
-  - cd $REPO_DIR
+  - cd /mejelly
   - docker-compose -f docker-compose.yml up -d
 script:
   - docker-compose -f docker-compose.yml run web rails cucumber
