@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+- '5'
+branches:
+  only:
+  - develop
+  - master
+sudo: required
+services:
+- docker
+env:
+  matrix:
+  - global:
+    - DOCKER_COMPOSE_VERSION: 2
+    - REPO=mejelly/jello-$TRAVIS_BRANCH
+    - COMMIT=${TRAVIS_COMMIT::8}
+before_install:
+  - openssl aes-256-cbc -K $encrypted_9f5b86caa04f_key -iv $encrypted_9f5b86caa04f_iv -in .travis/deploy_key.enc -out .travis/deploy_key -d
+before_script:
+  - docker build -t $REPO:$COMMIT -f $REPO_DIR/compose/passenger/Dockerfile .
+  - cd $REPO_DIR
+  - docker-compose -f docker-compose.yml up -d
+script:
+  - docker-compose -f docker-compose.yml run web rails cucumber
+  - docker-compose -f docker-compose.yml run web rails assets:precompile
+after_script:
+  - docker-compose down
