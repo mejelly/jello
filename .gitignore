@@ -18,3 +18,5 @@
 .idea
 coverage
 .env
+
+.DS_Store
