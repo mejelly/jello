@@ -1,24 +1,42 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [ :edit, :update, :destroy]
-  before_action :authenticate_user!#, only: [:new, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy]
   before_action :getUserInfo, only: [ :index, :show, :new]
 
   # GET /articles
   # GET /articles.json
   def getUserInfo
     @user = current_user
-    @currentuserid = @user[:extra][:raw_info][:user_id]
+    if(!@user.nil?)
+      @currentuserid = @user[:extra][:raw_info][:user_id]
+    end
   end
 
   def index
-    @articles = Article.all
-    #test= Translation.all
+    first_phase=Translation.select("max(created_at) as date, gist_id").group("gist_id")
+    result = []
+    i = 0
+    first_phase.each do |t|
+      result[i]=Article.select("translations.id as tid, translations.user_id as translator_id,translations.created_at as tdate, articles.*")
+                      .joins("LEFT JOIN translations on translations.article_id = articles.id")
+                      .where("translations.created_at":t.date).where("translations.gist_id":t.gist_id)
+      i = i+1
+    end
+    test = []
+    i = 0
+    result.each do |t|
+      t.each do |a|
+        test[i] = a
+        i = i+1
+      end
+    end
+    @articles = test
   end
+
 
   # GET /articles/1
   # GET /articles/1.jso
   def show
-
     @temp = Translation.order('translations.id DESC').select("translations.*, articles.*").joins(:article).where("translations.user_id": @currentuserid ).where(article_id:params[:id]).limit(1)
     if(@temp.length>0)
       @temp.each do |item|

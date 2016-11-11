@@ -23,6 +23,13 @@ module Auth0Helper
     @current_user
   end
 
+  def connect_github
+    conn = create_connection('https://mejelly.eu.auth0.com')
+    conn.headers = { 'Authorization': "Bearer #{JSON.parse(get_auth0_token(conn).body)['access_token'] }" }
+    url = "/api/v2/users/#{URI.encode(session[:userinfo][:extra][:raw_info][:user_id]) }"
+    conn.get(url)
+  end
+
   # @return the path to the login page
   def login_path
     root_path

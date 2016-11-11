@@ -1,29 +1,13 @@
-<p id="notice"><%= notice %></p>
+<div class="col-lg-12 articleTitle">
+<% if(!@article.url.empty?) %>
+      <%=link_to @article.title, @article.url, :target => "_blank"%>
+<% else %>
+  <%= @article.title %>
+<% end %>
+</div>
+<div class="col-lg-12">
+<%= raw @translatedText %>
+</div>
 
-<p>
-  <strong>Article:</strong>
-  <%= @translation.article_id %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @translation.user_id %>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <%= @translation.status %>
-</p>
-
-<p>
-  <strong>Article section:</strong>
-  <%= @translation.article_section %>
-</p>
-
-<p>
-  <strong>Translation section:</strong>
-  <%= @translation.translation_section %>
-</p>
-
-<%= link_to 'Edit', edit_translation_path(@translation) %> |
-<%= link_to 'Back', translations_path %>
+<%#= link_to 'Edit', edit_translation_path(@translation) %>
+<%#= link_to 'Back', translations_path %>

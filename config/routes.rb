@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   resources :translations
   resources :articles
-  root 'landing_page#home'
+  root to: 'articles#index'
   get 'dashboard' => 'dashboard#show'
   get '/auth/auth0/callback' => 'auth0#callback'
   get '/auth/failure'        => 'auth0#failure'
@@ -12,5 +12,6 @@ Rails.application.routes.draw do
   get 'createGist' =>'translations#create_gist'
   get 'updateGist' =>'translations#update_gist'
   get 'addcomment' =>'translations#add_comment'
+  get 'show' =>'translations#show'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

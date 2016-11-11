@@ -4,10 +4,14 @@
 <ul class="list-group">
     <% @articles.each do |article| %>
       <li class="list-group-item">
-          <!--<span><%= article.user_id %></span>-->
+        <span><%= article.tid %></span>
           <span><%= article.title %></span>
           <span><%= article.url %></span>
-          <span><%= link_to 'Show', article %></span>
+          <span><%= article.translator_id %></span>
+        <span><%= article.tdate %></span>
+
+        <span><%= link_to 'Translation', "translations/#{article.tid}" %></span>
+        <span><%= link_to 'Show', article %></span>
       </li>
         <!--<td><%= article.content %></td>-->
         <!--<td><%= link_to 'Show', article %></td>-->

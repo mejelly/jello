@@ -70,7 +70,7 @@
     <%= hidden_field_tag 'hightlight_key' %>
     <%= hidden_field_tag 'current_gist_id', @current_gist_id %>
     <%= hidden_field_tag 'gist_filename', @gist_filename %>
-    <%= text_area_tag('translateHere', @translatedText.gsub('<br />', "\n")) %>
+    <%= raw text_area_tag('translateHere', @translatedText) %>
     <div class="actions">
       <%= submit_tag("Save",:class=>"btn btn-default") %>
     </div>

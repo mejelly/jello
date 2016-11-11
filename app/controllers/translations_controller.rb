@@ -28,13 +28,6 @@ class TranslationsController < ApplicationController
     end
   end
 
-  def connect_github
-    conn = create_connection('https://mejelly.eu.auth0.com')
-    conn.headers = { 'Authorization': "Bearer #{JSON.parse(get_auth0_token(conn).body)['access_token'] }" }
-    url = "/api/v2/users/#{URI.encode(session[:userinfo][:extra][:raw_info][:user_id]) }"
-    conn.get(url)
-  end
-
   def get_github_token
     @github_token = JSON.parse(connect_github.body)['identities'][0]['access_token']
   end
@@ -142,6 +135,9 @@ class TranslationsController < ApplicationController
   # GET /translations/1
   # GET /translations/1.json
   def show
+    @current_gist_id = @translation.gist_id
+    fetch_gist
+    @article = Article.find(@translation.article_id)
   end
 
   # GET /translations/new
