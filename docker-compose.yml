@@ -6,7 +6,7 @@ services:
     image: "${REPO}:${COMMIT}"
     build:
       context: .
-      dockerfile: mejelly/compose/passenger/Dockerfile
+      dockerfile: compose/passenger/Dockerfile
     entrypoint: /entrypoint.sh
     command: /start-dev.sh
     volumes:
