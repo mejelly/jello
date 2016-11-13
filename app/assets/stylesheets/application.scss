@@ -46,7 +46,6 @@
   min-height: 500px !important;
   word-break: break-all;
   margin-bottom: 10px;
-
 }
 
 .highlightOriginal
@@ -63,12 +62,12 @@
     border-radius: 3px;
     font-weight: 400;
   }
-  .article-content
+  #article-content
   {
     background: #f8f8f8;
   }
 }
-.article-content,.medium-editor-element
+#article-content,.medium-editor-element
 {
   text-align: justify;
   padding: 10px;

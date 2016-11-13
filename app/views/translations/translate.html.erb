@@ -27,10 +27,15 @@
     pathname=pathname.split('#');
     return [tscheck[0],pathname[1]];
   }
-  $(window).on('hashchange', function(e){
+  function setHiddenField()
+  {
     $("[name='hightlight_key']").val(getCurrentPath()[1]);
+  }
+  $(window).on('hashchange', function(e){
+    setHiddenField()
   });
   $(window).ready(function() { //alert(1)
+    setHiddenField();
     <% if(!@article_section.nil?) %>
     if(getCurrentPath()[1] === undefined) {
       var url = getCurrentPath()[0] + "&ts=" + $.now() + "#<%= @article_section %>";
@@ -57,7 +62,7 @@
   form_tag(path, method: "get", class: "") do
 %>
 <div class="col-lg-6" id="originalArticle">
-  <div class="article-content">
+  <div id="article-content">
     <p>
     <%=
       @originalArticle.content

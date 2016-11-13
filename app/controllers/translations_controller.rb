@@ -137,6 +137,8 @@ class TranslationsController < ApplicationController
       req.url '/gists/'+@current_gist_id
       req.headers['Content-Type'] = 'application/json'
     end
+    puts '----->'
+    puts response.body
     JSON.parse(response.body)['files'].each do |key, value|
       @translatedText = value['content']
       @gist_filename = value['filename']
@@ -195,7 +197,7 @@ class TranslationsController < ApplicationController
       tempdate=t.date.to_s.chomp(' UTC')
       query +="(translations.created_at::text like '#{tempdate}%' AND translations.gist_id = '#{t.gist_id}') OR "
     end
-    @articles = Article.select("translations.id as tid, translations.user_id as translator_id, translations.user_name,translations.created_at as tdate, articles.*")
+    @articles = Article.select("translations.id as tid, translations.user_id as translator_id, translations.user_name,translations.created_at as tdate,translations.article_section as article_section, articles.*")
                     .joins("LEFT JOIN translations on translations.article_id = articles.id").where("translations.user_id =?",userinfo[0])
                     .where(query.chomp('OR '))
   end

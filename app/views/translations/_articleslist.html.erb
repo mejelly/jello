@@ -1,12 +1,25 @@
 <ul class="list-group">
   <% articles.each do |article| %>
       <li class="list-group-item">
+
+
         <%
           if(is_profile)
-            article.user_name = ''
-          end
-        %>
-        <span><%= link_to article.title+" "+article.user_name.to_s, show_path(id:article.tid) %></span>
+          if(!article.article_section.nil?)%>
+            <a href="<%= translate_path(article_id: article.id )%>#<%= article.article_section %>" target="_blank">
+              <%= article.title %>
+            </a>
+        <% else%>
+            <a href="<%= translate_path(article_id: article.id )%>" target="_blank">
+              <%= article.title %>
+            </a>
+        <% end %>
+        <% else %>
+            <span><%= link_to article.title+" "+article.user_name.to_s, show_path(id:article.tid) %></span>
+        <% end %>
+
+
+
         <span class="pull-right">
           <% if(!@current_user.nil?) %>
             <%= link_to 'Original Article', article %>
@@ -15,3 +28,14 @@
       </li>
   <% end %>
 </ul>
+
+
+
+
+
+
+
+
+
+
+
