@@ -6,7 +6,7 @@
             article.user_name = ''
           end
         %>
-        <span><%= link_to article.title+" "+article.user_name.to_s, "translations/#{article.tid}" %></span>
+        <span><%= link_to article.title+" "+article.user_name.to_s, show_path(id:article.tid) %></span>
         <span class="pull-right">
           <% if(!@current_user.nil?) %>
             <%= link_to 'Original Article', article %>
