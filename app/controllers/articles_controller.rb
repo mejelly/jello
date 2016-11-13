@@ -5,14 +5,6 @@ class ArticlesController < ApplicationController
 
   # GET /articles
   # GET /articles.json
-  def get_user_info
-    @user = current_user
-    puts "======================================"
-    puts current_user
-    if(!@user.nil?)
-      @currentuserid = @user[:extra][:raw_info][:user_id]
-    end
-  end
 
   def index
     first_phase=Translation.select("max(created_at) as date, gist_id").group("gist_id")

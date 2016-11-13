@@ -3,11 +3,8 @@ class TranslationsController < ApplicationController
   before_action :get_github_token, only: [:create_gist, :update_gist, :add_comment]
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insert_translation, only: [:create_gist]
+  before_action :get_user_info, only: [:insert_translation, :translate, :show]
 
-  def get_user_info
-    @user = current_user
-    @currentuserid = @user[:extra][:raw_info][:user_id]
-  end
 
   def create_connection(url)
     Faraday.new(url: url) do |faraday|
@@ -76,7 +73,6 @@ class TranslationsController < ApplicationController
 
   def insert_translation
     @article_section_hkey = params[:hightlight_key] # params[:articleSentence]
-    get_user_info
     @translation = Translation.new(
       article_id:@article_id,
       user_id: @currentuserid,
@@ -168,7 +164,6 @@ class TranslationsController < ApplicationController
   def translate
     @article_id = params[:article_id]
     @originalArticle = Article.find_by(id: @article_id)
-    get_user_info
     check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @currentuserid , article_id: @article_id)
 
     @translatedText = ''
