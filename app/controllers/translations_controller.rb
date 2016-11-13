@@ -1,10 +1,9 @@
 class TranslationsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:show]
   before_action :get_github_token, only: [:create_gist, :update_gist, :add_comment]
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insert_translation, only: [:create_gist]
   before_action :get_user_info, only: [:insert_translation, :translate, :show]
-
 
   def create_connection(url)
     Faraday.new(url: url) do |faraday|
@@ -35,6 +34,7 @@ class TranslationsController < ApplicationController
     conn.headers = {
       'Authorization': "token #{@github_token}"
     }
+
     url = "/gists/#{@current_gist_id}"
     JSON.parse(conn.get(url).body)['files'].each do |key, value|
       @translatedText = value['content']
@@ -72,14 +72,16 @@ class TranslationsController < ApplicationController
   end
 
   def insert_translation
+    get_user_info
     @article_section_hkey = params[:hightlight_key] # params[:articleSentence]
     @translation = Translation.new(
       article_id:@article_id,
-      user_id: @currentuserid,
+      user_id: @currentuser[0],
       status: true,
       article_section: @article_section_hkey,
       translation_section:[],
-      gist_id: @current_gist_id
+      gist_id: @current_gist_id,
+      user_name: @currentuser[1]
     )
   end
 
@@ -96,13 +98,11 @@ class TranslationsController < ApplicationController
   end
 
   def list_comments
-    get_github_token
-    conn = create_connection('https://api.github.com')
-    conn.headers = {
-        'Authorization': "token #{@github_token}"
-    }
-    url = "/gists/#{@current_gist_id}/comments"
-    @comments = conn.get(url).body
+    response = create_connection('https://api.github.com').get do |req|
+      req.url "/gists/#{@current_gist_id}/comments"
+      req.headers['Content-Type'] = 'application/json'
+    end
+    @comments = response.body
   end
 
   def update_gist_payload(translation_content)
@@ -132,8 +132,18 @@ class TranslationsController < ApplicationController
   # GET /translations/1.json
   def show
     @current_gist_id = @translation.gist_id
-    fetch_gist
     @article = Article.find(@translation.article_id)
+    response = create_connection('https://api.github.com').get do |req|
+      req.url '/gists/'+@current_gist_id
+      req.headers['Content-Type'] = 'application/json'
+    end
+    JSON.parse(response.body)['files'].each do |key, value|
+      @translatedText = value['content']
+      @gist_filename = value['filename']
+    end
+    if(!@translation.nil?)
+      list_comments
+    end
   end
 
   # GET /translations/new
@@ -164,7 +174,7 @@ class TranslationsController < ApplicationController
   def translate
     @article_id = params[:article_id]
     @originalArticle = Article.find_by(id: @article_id)
-    check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @currentuserid , article_id: @article_id)
+    check_translation = Translation.order('id DESC').limit(1).find_by(user_id: @currentuser[0] , article_id: @article_id)
 
     @translatedText = ''
     if(!check_translation.nil?)

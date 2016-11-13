@@ -13,7 +13,7 @@ class ArticlesController < ApplicationController
       tempdate=t.date.to_s.chomp(' UTC')
       query +="(translations.created_at::text like '#{tempdate}%' AND translations.gist_id = '#{t.gist_id}') OR "
     end
-    @articles = Article.select("translations.id as tid, translations.user_id as translator_id,translations.created_at as tdate, articles.*")
+    @articles = Article.select("translations.id as tid, translations.user_id as translator_id, translations.user_name,translations.created_at as tdate, articles.*")
                       .joins("LEFT JOIN translations on translations.article_id = articles.id")
                       .where(query.chomp('OR '))
   end
@@ -21,7 +21,7 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.jso
   def show
-    @temp = Translation.order('translations.id DESC').select("translations.*, articles.*").joins(:article).where("translations.user_id": @currentuserid ).where(article_id:params[:id]).limit(1)
+    @temp = Translation.order('translations.id DESC').select("translations.*, articles.*").joins(:article).where("translations.user_id": @currentuser[0] ).where(article_id:params[:id]).limit(1)
     if(@temp.length>0)
       @temp.each do |item|
         @article=item

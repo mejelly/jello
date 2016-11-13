@@ -1,0 +1,16 @@
+<div class="col-lg-12">
+<%
+  if(!comments.nil?)
+    JSON.parse(comments).reverse_each do |value| %>
+
+        <div class="commentDiv container-fluid">
+          <div class="commentBy">
+            <img src="<%=  value['user']['avatar_url'] %>" class="commentAvator"/><%=  value['user']['login'] %>
+          </div>
+          <div class="commentBody"><%=  value['body'] %></div>
+
+        </div>
+    <% end
+  end
+ %>
+</div>
