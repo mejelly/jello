@@ -53,19 +53,28 @@
 {
   background: yellow;
 }
-#originalArticle
-{
-  input
-  {
+#originalArticle {
+
+  input {
     display: none;
   }
-  label{
+  label {
     cursor: pointer;
     border-radius: 3px;
     font-weight: 400;
   }
+  .article-content
+  {
+    background: #f8f8f8;
+  }
 }
-/**/
+.article-content,.medium-editor-element
+{
+  text-align: justify;
+  padding: 10px;
+}
+/*
+*/
 
 .linedwrap {
   border: 1px solid #c0c0c0;
