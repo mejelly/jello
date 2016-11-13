@@ -20,7 +20,15 @@ module Auth0Helper
   # What's the current_user?
   # @return [Hash]
   def current_user
+    @current_user = session[:userinfo]
     @current_user
+  end
+
+  def get_user_info
+    @user = current_user
+    if(!@user.nil?)
+      @currentuserid = @user[:extra][:raw_info][:user_id]
+    end
   end
 
   def connect_github
