@@ -26,9 +26,13 @@ module Auth0Helper
 
   def get_user_info
     @user = current_user
+    @currentuser=[]
     if(!@user.nil?)
       @currentuserid = @user[:extra][:raw_info][:user_id]
+      @currentuser[0] = @currentuserid
+      @currentuser[1] = @user[:info][:name]
     end
+    @currentuser
   end
 
   def connect_github
