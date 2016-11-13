@@ -51,6 +51,8 @@ group :test do
   gem 'rails-controller-testing'
   gem 'knock'
   gem 'webmock'
+  gem 'capybara-screenshot'
+  gem 'aws-sdk'
 end
 
 group :development do
