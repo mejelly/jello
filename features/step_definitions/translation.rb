@@ -9,6 +9,7 @@ When(/^I login$/) do
   fill_in 'login_field', with: ENV['GITHUB_USERNAME']
   fill_in 'password', with: ENV['GITHUB_PASSWORD']
   click_button 'Sign in'
+  sleep 1
 end
 
 When(/^I create a new article$/) do
@@ -21,5 +22,4 @@ end
 
 Then(/^I should see article detail$/) do
   expect(page).to have_content("Hello, there! This is a content yay")
-  save_and_open_page
 end

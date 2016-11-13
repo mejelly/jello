@@ -5,6 +5,7 @@
 # files.
 
 require 'cucumber/rails'
+require 'capybara-screenshot/cucumber'
 require 'capybara/poltergeist'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
@@ -60,3 +61,18 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 Capybara.default_max_wait_time = 20
 Capybara.default_driver = :poltergeist
 Capybara.server_port = 59076
+
+Capybara.configure do |config|
+  config.app_host = 'http://web:3000'
+end
+
+Capybara::Screenshot.append_timestamp = false
+
+Capybara::Screenshot.s3_configuration = {
+  s3_client_credentials: {
+    access_key_id: ENV['AWS_ACCESS_KEY'],
+    secret_access_key: ENV['AWS_SECRET_KEY'],
+    region: 'ap-southeast-1'
+  },
+  bucket_name: 'mejelly-screenshots'
+}
