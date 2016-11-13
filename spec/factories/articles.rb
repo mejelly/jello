@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :article_1, class: Article do
-    user_id "MyString"
+    id 1
+    user_id "MyStringXYZ"
     title "MyString"
     url "MyString"
     content "MyText"

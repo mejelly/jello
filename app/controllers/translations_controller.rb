@@ -141,13 +141,14 @@ class TranslationsController < ApplicationController
   end
 
   # GET /translations/new
-  def new
-    @translation = Translation.new
-  end
+  # We don't use this, just leave template there for now
+  # def new
+  #   @translation = Translation.new
+  # end
 
   # GET /translations/1/edit
-  def edit
-  end
+  # def edit
+  # end
 
   # def createSequenceJson(inputText)
   #   article_arr = inputText.split('.')
@@ -192,6 +193,8 @@ class TranslationsController < ApplicationController
   # POST /translations
   # POST /translations.json
   def create
+    puts '-- I am from CODE --'
+    puts translation_params
     @translation = Translation.new(translation_params)
 
     respond_to do |format|
