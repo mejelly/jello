@@ -1,20 +1,6 @@
 <p id="notice"><%= notice %></p>
-
-<h1>Articles</h1>
-<ul class="list-group">
-    <% @articles.each do |article| %>
-      <li class="list-group-item">
-        <!--<span><%= article.tid %></span>-->
-        <span><%= link_to article.title+" "+article.user_name.to_s, "translations/#{article.tid}" %></span>
-        <span>
-          <% if(!@current_user.nil?) %>
-            <%= link_to 'Original Article', article %>
-          <% end %>
-        </span>
-      </li>
-    <% end %>
-</ul>
-
+<div class="pgTitle">Articles</div>
+<%= render 'translations/articleslist', articles: @articles, is_profile:false %>
 <br>
 
 <%= link_to 'New Article', new_article_path %>

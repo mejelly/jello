@@ -142,15 +142,37 @@
   width: 100%;
   padding: 5px;
 }
-.articleTitle
-{
-  font-size: 20px;
-  padding-bottom: 10px;
-  font-weight: 500;
 
+#profileDivLeft
+{
+  font-size: 22px;
+  div
+  {
+    padding-top: 30px;
+  }
+  span{
+    color: #999999;
+  }
+  image
+  {
+    border-radius: 3px;
+  }
+}
+#profileDiv>div{
+  padding: 30px;
+  color:#2E2F30;
+
+}
+.pgTitle
+{
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
   *
   {
     color: #666666;
   }
 }
+
 /**/

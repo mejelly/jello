@@ -3,7 +3,7 @@ class TranslationsController < ApplicationController
   before_action :get_github_token, only: [:create_gist, :update_gist, :add_comment]
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
   after_action :insert_translation, only: [:create_gist]
-  before_action :get_user_info, only: [:insert_translation, :translate, :show]
+  before_action :get_user_info, only: [:insert_translation, :translate, :show, :profile]
 
   def create_connection(url)
     Faraday.new(url: url) do |faraday|
@@ -185,6 +185,19 @@ class TranslationsController < ApplicationController
     end
 
     #@article_json = createSequenceJson(@originalArticle.content)
+  end
+
+  def profile
+    userinfo = get_user_info
+    first_phase=Translation.select("max(created_at) as date, gist_id").group("gist_id")
+    query=''
+    first_phase.each do |t|
+      tempdate=t.date.to_s.chomp(' UTC')
+      query +="(translations.created_at::text like '#{tempdate}%' AND translations.gist_id = '#{t.gist_id}') OR "
+    end
+    @articles = Article.select("translations.id as tid, translations.user_id as translator_id, translations.user_name,translations.created_at as tdate, articles.*")
+                    .joins("LEFT JOIN translations on translations.article_id = articles.id").where("translations.user_id =?",userinfo[0])
+                    .where(query.chomp('OR '))
   end
 
   # def saveGist

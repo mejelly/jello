@@ -6,8 +6,15 @@
 <!--</p>-->
 
 <p>
-  <strong>Title:</strong>
+<div class="pgTitle">
   <%= @article.title %>
+</div>
+<%
+  if(defined? @article.article_section)%>
+    <a href="<%= translate_path(article_id: @article.id )%>#<%= @article.article_section %>" target="_blank">Translate This Article</a>
+<% else%>
+    <a href="<%= translate_path(article_id: @article.id )%>" target="_blank">Translate This Article</a>
+    |<% end %>
 </p>
 
 <p>
@@ -16,15 +23,9 @@
 </p>
 
 <p>
-  <strong>Content:</strong>
   <%= @article.content %>
 </p>
 
 <%#=link_to 'Edit', edit_article_path(@article) %>
-<%
-  if(defined? @article.article_section)%>
-    <a href="<%= translate_path(article_id: @article.id )%>#<%= @article.article_section %>" target="_blank">Translate This Article</a>
-<% else%>
-    <a href="<%= translate_path(article_id: @article.id )%>" target="_blank">Translate This Article</a>
-|<% end %>
+
 <%= link_to 'Back', articles_path %>
