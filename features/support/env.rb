@@ -60,10 +60,18 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 Capybara.default_max_wait_time = 20
 Capybara.default_driver = :poltergeist
+Capybara.javascript_driver = :poltergeist
 Capybara.server_port = 59076
 
 Capybara.configure do |config|
   config.app_host = 'http://web:3000'
+end
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app,
+      debug: false,
+      js_errors: false,
+  )
 end
 
 Capybara::Screenshot.append_timestamp = false
