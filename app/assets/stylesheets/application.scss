@@ -15,8 +15,14 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+body
+{
+  margin-bottom: 100px;
+}
 .contentContainer{
   max-width: 1400px;
+
 }
 #pgContainer
 {
@@ -43,9 +49,16 @@
 
 #translateHere,.medium-editor-element{
   width: 100%;
-  min-height: 500px !important;
   word-break: break-all;
   margin-bottom: 10px;
+}
+#translateHere
+{
+  min-height: 500px !important;
+}
+.medium-editor-element
+{
+  min-height: 300px !important;
 }
 
 .highlightOriginal
