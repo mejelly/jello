@@ -9,4 +9,4 @@ def staging():
 def deploy():
     with cd('/home/mejelly/jello'):
         run("docker pull {}:{}".format(os.environ['REPO'], os.environ['COMMIT']))
-        run("docker-compose -f mejelly/docker-compose.production.yml run web rails db:migrate")
+        run("docker-compose -f docker-compose.production.yml run web rails db:migrate")
