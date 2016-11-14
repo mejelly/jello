@@ -148,13 +148,3 @@ RSpec.configure do |config|
 =end
 end
 
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app,
-      debug: true,
-      js_errors: true,
-  )
-end
-
-Capybara.javascript_driver = :poltergeist
-Capybara.default_driver = :poltergeist
-Capybara.server_port = 59076
