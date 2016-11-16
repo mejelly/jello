@@ -9,8 +9,6 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <script src="https://cdn.auth0.com/js/lock/10.2/lock.min.js"></script>
-    <link rel="stylesheet" href="/assets/medium-editor.min.css" type="text/css" />
-    <link rel="stylesheet" href="/assets/mani.min.css" type="text/css" />
     <script>
       var lock = new Auth0Lock(
           '<%= Rails.application.secrets.auth0_client_id %>',
