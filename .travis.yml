@@ -21,7 +21,6 @@ before_script:
   - docker-compose -f docker-compose.yml up -d
 script:
   - docker-compose -f docker-compose.yml run web rails cucumber
-  - docker-compose -f docker-compose.yml run web rails assets:precompile
 after_script:
   - docker-compose down
 after_success:

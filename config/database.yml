@@ -85,8 +85,8 @@ test: &test
 production:
   <<: *default
   database: mejelly_production
-  username: mejelly
-  password: <%= ENV['MEJELLY_DATABASE_PASSWORD'] %>
+  username: postgres
+  host: db
 
 cucumber:
   <<: *test

@@ -16,7 +16,11 @@ RUN mv /tmp/phantomjs/bin/phantomjs /usr/local/bin/
 ADD . /mejelly
 ENV APPLICATION_ROOT /mejelly
 WORKDIR $APPLICATION_ROOT
+RUN touch /mejelly/log/production.log
+RUN chmod 664 /mejelly/log/production.log
+RUN chown -R app. /mejelly
 RUN bundle install
+RUN RAILS_ENV=production bin/rails assets:precompile
 
 COPY compose/passenger/entrypoint.sh /entrypoint.sh
 COPY compose/passenger/start-dev.sh /start-dev.sh
