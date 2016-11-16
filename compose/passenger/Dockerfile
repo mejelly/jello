@@ -16,6 +16,7 @@ RUN mv /tmp/phantomjs/bin/phantomjs /usr/local/bin/
 ADD . /mejelly
 ENV APPLICATION_ROOT /mejelly
 WORKDIR $APPLICATION_ROOT
+RUN touch /mejelly/log/production.log
 RUN bundle install
 
 COPY compose/passenger/entrypoint.sh /entrypoint.sh
