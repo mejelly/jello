@@ -20,6 +20,22 @@
 //
 //    });
   });
+  $(document).ready(function(){
+    // Store
+    // Store
+
+    if (localStorage.getItem("showhint") == undefined) {
+      $('#hintArea').show();
+      localStorage.setItem("showhint", false);
+    } else {
+      $('#hintArea').hide();
+    }
+
+    $('#closeHint').click(function(){
+      $('#hintArea').hide();
+    });
+  });
+
 
   function getCurrentPath() {
     var pathname = window.location.href;
@@ -46,7 +62,7 @@
 
 
 </script>
-<div class="col-lg-12">
+<div class="col-lg-12" style="margin-bottom: 10px">
   <div class="pgTitle">
     <%= @originalArticle.title %>
   </div>
@@ -58,9 +74,16 @@
     path="/updateGist"
   end
 %>
+<div id="hintArea">
+  <div id="siteHint">Press SHIFT key twice and click on the sentences to highlight.
+    <%= image_tag("close.png", id: "closeHint") %>
+  </div>
+  <div id="tipHint"></div>
+</div>
 <%=
   form_tag(path, method: "get", class: "") do
 %>
+
 <div class="col-lg-6" id="originalArticle">
   <div id="article-content">
     <p>

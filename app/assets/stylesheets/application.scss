@@ -212,6 +212,41 @@ a:hover
 {
 
   text-decoration: none;  color: #1c2324;
+  background: none;
 }
+#hintArea
+{
+  position: absolute;
+  margin-left: 10px;
 
+
+}
+#siteHint
+{
+
+  border-radius: 3px;
+  position: relative;
+  background: #fff;
+  padding: 10px;
+
+}
+#tipHint
+{
+  left:45%;
+  content: "";
+  display: block;
+  position: relative;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-width: 16px;
+  border-style: solid;
+  pointer-events: none;
+  border-top-color: #fff;
+}
+#closeHint
+{
+  cursor: pointer;
+  margin-left: 10px;
+}
 /**/
