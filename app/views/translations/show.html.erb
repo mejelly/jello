@@ -9,6 +9,8 @@
 <%= raw @translatedText %>
 </div>
 
-<%= render 'comments', comments: @comments %>
+
+</div>
+<%= render 'comments', {comments: @comments, current_gist_id:@current_gist_id} %>
 <%#= link_to 'Edit', edit_translation_path(@translation) %>
 <%#= link_to 'Back', translations_path %>
