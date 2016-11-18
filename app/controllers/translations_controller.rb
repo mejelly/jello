@@ -65,7 +65,7 @@ class TranslationsController < ApplicationController
 
   def redirect_after_create
     if insert_translation.save
-      redirect_to profile_path
+      redirect_to :back
     else
       puts '-----------Fail------------'
     end
