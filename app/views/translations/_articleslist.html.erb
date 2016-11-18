@@ -22,6 +22,7 @@
 
         <span class="pull-right">
           <% if(!@current_user.nil?) %>
+            <a href="<%= translate_path(article_id: article.id )%>" target="_blank">Translate This Article</a> |
             <%= link_to 'Original Article', article %>
           <% end %>
         </span>
