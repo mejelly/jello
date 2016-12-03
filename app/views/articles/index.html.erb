@@ -3,9 +3,22 @@
     <div id="newarticle"><%= link_to 'New Article', new_article_path, id: "" %></div>
 <% end %>
 <div class="pgTitle">Articles</div>
+<ul class="list-group">
+  <% @newarticles.each do |article| %>
+      <li class="list-group-item">
+        <%= link_to article.title, article %>
+        <span class="pull-right">
+          <% if(!@current_user.nil?) %>
+            <a href="<%= translate_path(article_id: article.id )%>" target="_self">Translate This Article</a>
+          <% end %>
+        </span>
+      </li>
+      <% end %>
+</ul>
 <div>
 
 </div>
 <div class="pgTitle">Translated Articles</div>
 <%= render 'translations/articleslist', articles: @articles, is_profile:false %>
+
 <br>

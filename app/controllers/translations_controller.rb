@@ -138,8 +138,6 @@ class TranslationsController < ApplicationController
       req.url '/gists/'+@current_gist_id
       req.headers['Content-Type'] = 'application/json'
     end
-    puts '----->'
-    puts response.body
     JSON.parse(response.body)['files'].each do |key, value|
       @translatedText = value['content']
       @gist_filename = value['filename']

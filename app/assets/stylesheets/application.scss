@@ -21,9 +21,13 @@ body
   margin-bottom: 100px;
 }
 .list-group-item,body{
-  background: #f2f2f2;
+  background: #ffffff;
 }
-
+.list-group-item{
+  background: rgba(44,194,252,0.03);
+  margin-top: 5px;
+  border: none;
+}
 .contentContainer{
   max-width: 1400px;
 
@@ -41,14 +45,14 @@ body
   padding-top: 20px; padding-bottom: 20px; margin-bottom: 50px;
   font-weight: 500;
   font-size: 13px;
-  background: orangered; color: white;
+  background: #00acf1; color: white;
   a{
     color: #fff;
   }
 }
 #newArticle{
   .col-form-label{
-    font-weight: 500;
+    font-weight: normal;
   }
 }
 
@@ -141,19 +145,17 @@ body
 }
 .commentDiv
 {
-  border: 1px solid #c0c0c0;
-  border-radius: 3px;
+
   margin-top: 10px;
   padding: 5px;
   font-size: 12px;
-  background: #f4f4f4;
   .commentBy{
     font-weight: 500;
 
     .commentAvator
     {
       width: 30px;
-      border-radius: 3px;
+
       margin-right: 5px;
     }
   }
@@ -167,6 +169,14 @@ body
 {
   width: 100%;
   padding: 5px;
+  border:1px solid #d5d5d5 ;
+}
+.commentAvatar
+{
+  position: relative;
+  img{
+    width: 50px;
+  }
 }
 
 #profileDivLeft
@@ -194,10 +204,10 @@ body
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 10px;color: #005e81;
   *
   {
-    color: #2E2F30;
+    color: #005e81;
   }
 }
 #headerUserInfo
@@ -256,7 +266,12 @@ p, ol, ul, td {
 
 #commentArea
 {
-  margin-top:20px
+  margin-top:20px;
+  .form-group
+  {
+    margin-left: 70px;
+    position: relative;
+  }
 }
 
 #actionCompelte
@@ -276,11 +291,46 @@ p, ol, ul, td {
   }
 }
 .btn{
-  border-radius: 1px;
+  border-radius: 1px;color: #005e81;
 }
-
+.btn:hover
+{
+  color: #fff;
+  background: #005e81;
+}
 #newarticle
 {
   margin-bottom: 20px;
+}
+
+.arrow-inner
+{
+  border: 7px solid #fff;
+  left: 2px;
+  top: 1px;
+  z-index: 1;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  position: absolute;
+}
+.arrow-outer {
+  border: 6px solid #d5d5d5;
+  left: 0;
+  top: 0;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  position: absolute;
+}
+.arrow-wrapper
+{
+  height: 12px;
+  position: absolute;
+  top: 0;
+  width: 12px;
+  left: -12px;
+  margin: 0;
+}
+textarea:focus, textarea:active{
+  outline: none;
 }
 /**/
