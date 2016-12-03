@@ -40,6 +40,7 @@ body
 #pgHeader{
   padding-top: 20px; padding-bottom: 20px; margin-bottom: 50px;
   font-weight: 500;
+  font-size: 13px;
   background: orangered; color: white;
   a{
     color: #fff;
@@ -190,13 +191,13 @@ body
 }
 .pgTitle
 {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 500;
   margin-bottom: 10px;
   padding-bottom: 10px;
   *
   {
-    color: #666666;
+    color: #2E2F30;
   }
 }
 #headerUserInfo
@@ -273,5 +274,13 @@ p, ol, ul, td {
     background: rgba(244,66,66,0.3);
     color: #2E2F30;
   }
+}
+.btn{
+  border-radius: 1px;
+}
+
+#newarticle
+{
+  margin-bottom: 20px;
 }
 /**/

@@ -101,7 +101,9 @@
     <%= hidden_field_tag 'gist_filename', @gist_filename %>
     <%= raw text_area_tag('translateHere', @translatedText) %>
     <div class="actions">
-      <%= submit_tag("Save Translation",:class=>"btn btn-default savetranslation") %>
+      <button name="" class="btn btn-default savetranslation">
+        <span class="glyphicon glyphicon glyphicon-saved"></span> Save Translation
+      </button>
     </div>
   </div>
 

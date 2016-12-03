@@ -41,9 +41,9 @@
                         <%= link_to @user[:info][:name], profile_path %>
                   </span>
 
-                  <a href="https://<%= Rails.application.secrets.auth0_domain %>/v2/logout?returnTo=http://localhost:3000/">Logout</a>
+                  <a href="https://<%= Rails.application.secrets.auth0_domain %>/v2/logout?returnTo=http://localhost:3000/"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
               <% else %>
-                  <a  href="javascript:;" onclick="lock.show();">Login</a>
+                  <a  href="javascript:;" onclick="lock.show();"><span class="glyphicon glyphicon-log-in"></span> Login</a>
               <% end %>
             </div>
           </div>

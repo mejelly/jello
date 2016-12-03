@@ -5,15 +5,15 @@
 
         <%
           if(is_profile)
-          if(!article.article_section.nil?)%>
-            <a href="<%= translate_path(article_id: article.id )%>#<%= article.article_section %>" target="_blank">
-              <%= article.title %>
-            </a>
-        <% else%>
-            <a href="<%= translate_path(article_id: article.id )%>" target="_blank">
-              <%= article.title %>
-            </a>
-        <% end %>
+            if(!article.article_section.nil?)%>
+              <a href="<%= translate_path(article_id: article.id )%>#<%= article.article_section %>" target="_blank">
+                <%= article.title %>
+              </a>
+          <% else%>
+              <a href="<%= translate_path(article_id: article.id )%>" target="_blank">
+                <%= article.title %>
+              </a>
+          <% end %>
         <% else %>
             <span><%= link_to article.title+" : "+article.user_name.to_s, show_path(id:article.tid) %></span>
         <% end %>
