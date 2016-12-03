@@ -30,7 +30,7 @@ class TranslationsController < ApplicationController
 
   def fetch_gist
     get_github_token
-    conn = create_connection('https://api.github.com')
+    conn = create_connection('http://gist.mejelly.com:8000')
     conn.headers = {
       'Authorization': "token #{@github_token}"
     }
@@ -99,7 +99,7 @@ class TranslationsController < ApplicationController
   end
 
   def list_comments
-    response = create_connection('https://api.github.com').get do |req|
+    response = create_connection('http://gist.mejelly.com:8000').get do |req|
       req.url "/gists/#{@current_gist_id}/comments"
       req.headers['Content-Type'] = 'application/json'
     end
@@ -134,7 +134,7 @@ class TranslationsController < ApplicationController
   def show
     @current_gist_id = @translation.gist_id
     @article = Article.find(@translation.article_id)
-    response = create_connection('https://api.github.com').get do |req|
+    response = create_connection('http://gist.mejelly.com:8000').get do |req|
       req.url '/gists/'+@current_gist_id
       req.headers['Content-Type'] = 'application/json'
     end
