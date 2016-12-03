@@ -1,0 +1,4 @@
+<% if @comments.present? %>
+$('#loadhere').html('')
+$('#loadhere').html("<%= escape_javascript(render 'comments', comments: @comments) %>");
+<% end %>

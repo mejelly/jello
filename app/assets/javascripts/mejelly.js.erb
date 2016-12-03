@@ -1,0 +1,51 @@
+/**
+ * Created by reshma on 12/1/16.
+ */
+<% self.class.include Rails.application.routes.url_helpers %>
+$(document).ready(function(){
+    $('.submitcomment').click(function(){
+      $("body").css("cursor", "progress");
+        var message = $('#comment').val();
+        if(message=='') return
+        var current_gist_id = $('#current_gist_id').val();
+        param = $.param([
+            { name: 'comment', value: message},
+            { name:'current_gist_id', value: current_gist_id}
+          ]);
+        var url = '<%= addcomment_path %>' + '?' + param;
+        $.ajax(url).done(function(data) {
+          $('#comment').val('');
+          $("body").css("cursor", "default");
+        });
+    });
+
+  $('.savetranslation').click(function(){
+    $("body").css("cursor", "progress");
+    var translateHere = $('#translateHere').val();
+    if(translateHere=='') return
+    var article_id = $('#article_id').val();
+    var hightlight_key = $('#hightlight_key').val();
+    var current_gist_id = $('#current_gist_id').val();
+    var gist_filename = $('#gist_filename').val();
+    var article_section = $('#article_section').val();
+    param = $.param([
+      { name: 'translateHere', value: translateHere},
+      { name:'article_id', value: article_id},
+      { name:'hightlight_key', value: hightlight_key},
+      { name:'current_gist_id', value: current_gist_id},
+      { name:'gist_filename', value: gist_filename}
+    ]);
+
+    if(article_section == "true")
+      var url = '<%= create_gist_path %>' + '?' + param;
+    else
+      var url = '<%= update_gist_path %>' + '?' + param;
+
+    $.ajax(url).done(function(data) {
+      $("#actionCompelte").show();
+      $("body").css("cursor", "default");
+      setTimeout(function() {
+        $('#actionCompelte').fadeOut('fast');
+      }, 2000);     });
+  });
+});

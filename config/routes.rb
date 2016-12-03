@@ -9,8 +9,8 @@ Rails.application.routes.draw do
 
   get 'translate' => 'translations#translate'
   get 'saveGist' => 'translations#save_gist'
-  get 'createGist' =>'translations#create_gist'
-  get 'updateGist' =>'translations#update_gist'
+  get 'create_gist' =>'translations#create_gist'
+  get 'update_gist' =>'translations#update_gist'
   get 'addcomment' =>'translations#add_comment'
   get 'show' =>'translations#show'
   get 'profile' => 'translations#profile'

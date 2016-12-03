@@ -94,7 +94,8 @@ class TranslationsController < ApplicationController
     }
     payload = '{ "body": "'+comment+'"}'
     conn.post("/gists/#{@current_gist_id}/comments", payload)
-    redirect_to :back
+    list_comments
+    #redirect_to :back
   end
 
   def list_comments

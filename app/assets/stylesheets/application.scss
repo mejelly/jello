@@ -257,4 +257,21 @@ p, ol, ul, td {
 {
   margin-top:20px
 }
+
+#actionCompelte
+{
+  font-size: 14px;
+  text-align: center;
+  position: fixed;
+  top:48%;
+  left:0;
+  right: 0;
+  z-index: 1;
+  display: none;
+  span{
+    padding: 10px 20px;
+    background: rgba(244,66,66,0.3);
+    color: #2E2F30;
+  }
+}
 /**/
