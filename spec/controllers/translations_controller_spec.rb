@@ -100,47 +100,6 @@ RSpec.describe TranslationsController, type: :controller do
     end
   end
 
-  # describe "PUT #update" do
-  #   context "with valid params" do
-  #     let(:new_attributes) {
-  #       skip("Add a hash of attributes valid for your model")
-  #     }
-  #
-  #     it "updates the requested translation" do
-  #       translation = Translation.create! valid_attributes
-  #       put :update, params: { id: translation.to_param, translation: new_attributes }, session: valid_session
-  #       translation.reload
-  #       skip("Add assertions for updated state")
-  #     end
-  #
-  #     it "assigns the requested translation as @translation" do
-  #       translation = Translation.create! valid_attributes
-  #       put :update, params: { id: translation.to_param, translation: valid_attributes }, session: valid_session
-  #       expect(assigns(:translation)).to eq(translation)
-  #     end
-  #
-  #     it "redirects to the translation" do
-  #       translation = Translation.create! valid_attributes
-  #       put :update, params: { id: translation.to_param, translation: valid_attributes }, session: valid_session
-  #       expect(response).to redirect_to(translation)
-  #     end
-  #   end
-  #
-  #   context "with invalid params" do
-  #     it "assigns the translation as @translation" do
-  #       translation = Translation.create! valid_attributes
-  #       put :update, params: { id: translation.to_param, translation: invalid_attributes }, session: valid_session
-  #       expect(assigns(:translation)).to eq(translation)
-  #     end
-  #
-  #     it "re-renders the 'edit' template" do
-  #       translation = Translation.create! valid_attributes
-  #       put :update, params: { id: translation.to_param, translation: invalid_attributes }, session: valid_session
-  #       expect(response).to render_template("edit")
-  #     end
-  #   end
-  # end
-
   describe "DELETE #destroy" do
     it "destroys the requested translation" do
       translation = Translation.create! valid_attributes
@@ -153,6 +112,22 @@ RSpec.describe TranslationsController, type: :controller do
       translation = Translation.create! valid_attributes
       delete :destroy, params: { id: translation.to_param }, session: valid_session
       expect(response).to redirect_to(translations_url)
+    end
+  end
+
+  describe TranslationsController do
+    it "Connect GitHub should return json content" do
+      VCR.use_cassette 'controller/github' do
+        actual = controller.connect_github
+        expect(actual).not_to be_nil
+      end
+    end
+
+    it "get_github_token should return a token" do
+      VCR.use_cassette 'controller/github_token' do
+        actual = controller.get_github_token
+        expect(actual).not_to be_nil
+      end
     end
   end
 end

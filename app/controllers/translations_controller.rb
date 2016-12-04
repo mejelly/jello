@@ -5,23 +5,11 @@ class TranslationsController < ApplicationController
   after_action :insert_translation, only: [:create_gist]
   before_action :get_user_info, only: [:insert_translation, :translate, :show, :profile]
 
-  def create_connection(url)
-    Faraday.new(url: url) do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger                  # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
-  end
-
-  def get_auth0_token(conn)
-    req_body = "{ \"client_id\": \"#{ENV['AUTH0_CLIENT_ID']}\","
-    req_body += " \"client_secret\": \"#{ENV['AUTH0_CLIENT_SECRET']}\", "
-    req_body += '"audience": "https://mejelly.eu.auth0.com/api/v2/", "grant_type": "client_credentials" }'
-    conn.post do |req|
-      req.url '/oauth/token'
-      req.headers['Content-Type'] = 'application/json'
-      req.body = req_body
-    end
+  def connect_github
+    conn = create_connection('https://mejelly.eu.auth0.com')
+    conn.headers = { 'Authorization': "Bearer #{JSON.parse(get_auth0_token.body)['access_token'] }" }
+    url = "/api/v2/users/#{URI.encode(session[:userinfo][:extra][:raw_info][:user_id])}"
+    conn.get(url)
   end
 
   def get_github_token

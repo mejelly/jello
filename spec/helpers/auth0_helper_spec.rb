@@ -11,5 +11,10 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe Auth0Helper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "get_auth0_token should returns an auth0 token" do
+    VCR.use_cassette 'helpers/auth0_token' do
+      actual = get_auth0_token
+      expect(actual).not_to be_nil
+    end
+  end
 end

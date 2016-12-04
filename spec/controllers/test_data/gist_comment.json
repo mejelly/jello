@@ -1,0 +1,28 @@
+[
+  {
+    "url": "https://api.github.com/gists/e74c9b1702c691cf3b097910a23b6b60/comments/1937062",
+    "id": 1937062,
+    "user": {
+      "login": "mrteera",
+      "id": 1741387,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1741387?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mrteera",
+      "html_url": "https://github.com/mrteera",
+      "followers_url": "https://api.github.com/users/mrteera/followers",
+      "following_url": "https://api.github.com/users/mrteera/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mrteera/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mrteera/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mrteera/subscriptions",
+      "organizations_url": "https://api.github.com/users/mrteera/orgs",
+      "repos_url": "https://api.github.com/users/mrteera/repos",
+      "events_url": "https://api.github.com/users/mrteera/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mrteera/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2016-12-03T13:41:48Z",
+    "updated_at": "2016-12-03T13:41:48Z",
+    "body": "test comment"
+  }
+]

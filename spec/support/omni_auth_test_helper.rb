@@ -16,6 +16,7 @@ module OmniAuthTestHelper
             created_at: '2016-11-01T14:19:11.892Z',
             email: 'mock@email_mock.com',
             email_verified: true,
+            user_id: 'github|1741387'
         })
      })
 
