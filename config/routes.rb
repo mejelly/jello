@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
 
-  resources :articles do
-    resources :translations
-  end
+  resources :translations
+  resources :articles
   root to: 'articles#index'
   get 'dashboard' => 'dashboard#show'
   get '/auth/auth0/callback' => 'auth0#callback'
