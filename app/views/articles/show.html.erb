@@ -1,19 +1,16 @@
 <p id="notice"><%= notice %></p>
 
-<!--<p>-->
-  <!--<strong>User:</strong>-->
-  <!--<%= @article.user_id %>-->
-<!--</p>-->
-
 <p>
 <div class="pgTitle pull-left">
   <%= link_to @article.title, @article.url, target: '_blank' %>
 </div>
 <%
   if(defined? @article.article_section)%>
-    <a href="<%= translate_path(article_id: @article.id )%>#<%= @article.article_section %>" target="_self">Translate This Article</a>
+    <!--Hello from the other side -->
+    <a target="_self" href="<%= translate_path(article_id: @article.id )%>#<%= @article.article_section %>">Translate This Article</a>
 <% else%>
-    <a href="<%= translate_path(article_id: @article.id )%>" target="_self">Translate This Article</a>
+    <!--Hello from the other side part 2-->
+    <a target= "_self"href="<%= translate_path(article_id: @article.id )%>">Translate This Article</a>
 <% end %>
 </p>
 
