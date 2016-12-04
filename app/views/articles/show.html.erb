@@ -6,10 +6,8 @@
 </div>
 <%
   if(defined? @article.article_section)%>
-    <!--Hello from the other side -->
     <a target="_self" href="<%= translate_path(article_id: @article.id )%>#<%= @article.article_section %>">Translate This Article</a>
 <% else%>
-    <!--Hello from the other side part 2-->
     <a target= "_self"href="<%= translate_path(article_id: @article.id )%>">Translate This Article</a>
 <% end %>
 </p>
