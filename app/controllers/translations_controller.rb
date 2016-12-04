@@ -87,13 +87,15 @@ class TranslationsController < ApplicationController
 
   def add_comment
     @current_gist_id = params[:current_gist_id]
+    gist_uri = "/gists/#{@current_gist_id}/comments"
+    purge_cache(gist_uri)
     comment =  params[:comment].gsub(/[\r\n]+/, "<br />")
     conn = create_connection('https://api.github.com')
     conn.headers = {
         'Authorization': "token #{@github_token}"
     }
     payload = '{ "body": "'+comment+'"}'
-    conn.post("/gists/#{@current_gist_id}/comments", payload)
+    conn.post(gist_uri, payload)
     list_comments
     #redirect_to :back
   end
@@ -106,6 +108,14 @@ class TranslationsController < ApplicationController
     @comments = response.body
   end
 
+  def purge_cache(uri)
+    request = Typhoeus::Request.new(
+      "http://gist.mejelly.com:8000#{uri}",
+      method: :purge,
+    )
+    request.run
+  end
+
   def update_gist_payload(translation_content)
     '{ "description": "updated gist", "public": true, "files": { "' \
     + params[:gist_filename] +'": { "content": "' + translation_content +'" } } }'
@@ -115,12 +125,14 @@ class TranslationsController < ApplicationController
   def update_gist
     @article_id = params[:article_id]
     @current_gist_id = params[:current_gist_id]
+    gist_uri = "/gists/#{@current_gist_id}"
+    purge_cache(gist_uri)
     translation_content =  params[:translateHere].gsub(/[\r\n]+/, "<br />")
     conn = create_connection('https://api.github.com')
     conn.headers = {
       Authorization: "token #{@github_token}"
     }
-    conn.patch("/gists/#{@current_gist_id}", update_gist_payload(translation_content))
+    conn.patch(gist_uri, update_gist_payload(translation_content))
     insert_translation
     redirect_after_create
   end
