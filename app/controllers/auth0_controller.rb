@@ -3,6 +3,7 @@ class Auth0Controller < ApplicationController
   # and the IdP
   def callback
     session[:userinfo] = request.env['omniauth.auth']
+    # session[:userinfo] = param
     # Redirect to the URL you want after successful auth
     redirect_to root_path
   end
@@ -12,5 +13,6 @@ class Auth0Controller < ApplicationController
     @error_type = request.params['error_type']
     @error_msg = request.params['error_msg']
     # TODO show a failure page or redirect to an error page
+    redirect_to root_path
   end
 end

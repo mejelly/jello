@@ -65,6 +65,7 @@ RSpec.configure do |config|
 
   Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
+  config.include OmniAuthTestHelper, type: :controller
 
   config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
