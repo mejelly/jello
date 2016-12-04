@@ -160,16 +160,6 @@ class TranslationsController < ApplicationController
     end
   end
 
-  # GET /translations/new
-  # We don't use this, just leave template there for now
-  # def new
-  #   @translation = Translation.new
-  # end
-
-  # GET /translations/1/edit
-  # def edit
-  # end
-
   # def createSequenceJson(inputText)
   #   article_arr = inputText.split('.')
   #   i=0
@@ -225,8 +215,6 @@ class TranslationsController < ApplicationController
   # POST /translations
   # POST /translations.json
   def create
-    puts '-- I am from CODE --'
-    puts translation_params
     @translation = Translation.new(translation_params)
 
     respond_to do |format|
@@ -242,17 +230,17 @@ class TranslationsController < ApplicationController
 
   # PATCH/PUT /translations/1
   # PATCH/PUT /translations/1.json
-  def update
-    respond_to do |format|
-      if @translation.update(translation_params)
-        format.html { redirect_to @translation, notice: 'Translation was successfully updated.' }
-        format.json { render :show, status: :ok, location: @translation }
-      else
-        format.html { render :edit }
-        format.json { render json: @translation.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  # def update
+  #   respond_to do |format|
+  #     if @translation.update(translation_params)
+  #       format.html { redirect_to @translation, notice: 'Translation was successfully updated.' }
+  #       format.json { render :show, status: :ok, location: @translation }
+  #     else
+  #       format.html { render :edit }
+  #       format.json { render json: @translation.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # DELETE /translations/1
   # DELETE /translations/1.json
