@@ -6,5 +6,10 @@ FactoryGirl.define do
     status false
     article_section "MyString"
     translation_section "MyString"
+    user_name "Teera"
+  end
+
+  factory :translation2, class: Translation do
+
   end
 end
