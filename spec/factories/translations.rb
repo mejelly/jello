@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :translation do
+  factory :translation, class: Translation  do
     # sequence(:id) { |number| number }
     article_id 1
     user_id "mrteera"
@@ -7,6 +7,7 @@ FactoryGirl.define do
     article_section "MyString"
     translation_section "MyString"
     user_name "Teera"
+    gist_id "123456"
   end
 
   factory :translation2, class: Translation do

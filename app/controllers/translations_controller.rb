@@ -48,8 +48,9 @@ class TranslationsController < ApplicationController
     @article_id = params[:article_id]
     response = post_to_gist(translationContent)
     @current_gist_id = JSON.parse(response.body)['id']
-    insert_translation
-    redirect_after_create
+    insert_translation.save
+    render json: { current_gist_id: @current_gist_id}
+    # redirect_after_create
   end
 
   def post_to_gist(translation_content)

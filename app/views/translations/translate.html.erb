@@ -1,6 +1,6 @@
 <script>
   $(function() {
-    var editor = new MediumEditor('#translateHere');
+    //var editor = new MediumEditor('#translateHere');
     //$("#translateHere").linedtextarea();
 //    $('input[type=checkbox]').change(function(e) {
 //      var parentdiv = $(this).closest('div');
@@ -20,7 +20,8 @@
 //
 //    });
   });
-  $(document).ready(function(){
+  $(document).on('turbolinks:load', function(){
+    var editor = new MediumEditor('#translateHere');
     if (localStorage.getItem("showhint") == undefined) {
       $('#hintArea').show();
       localStorage.setItem("showhint", false);
