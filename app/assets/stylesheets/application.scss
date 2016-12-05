@@ -346,7 +346,8 @@ textarea:focus, textarea:active{
 {
   font-size: 13px;
   margin: 20px 0;
-  background: url(back.png) no-repeat;
+  background-image: image-url('back.png');
+  background-repeat: no-repeat;
   background-position-x: 0;
   background-size: contain;
   padding-left: 16px;
