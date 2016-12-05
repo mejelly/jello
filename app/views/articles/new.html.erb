@@ -1,6 +1,6 @@
 <script>
-  $(function() {
-    //var editor = new MediumEditor('.enableMediumEditor');
+  $(document).on('turbolinks:load', function(){
+    var editor = new MediumEditor('#article_content');
   });
 </script>
 <div class="goBack">
@@ -9,5 +9,3 @@
 <div class="pgTitle">New Article</div>
 
 <%= render 'form', article: @article %>
-
-
