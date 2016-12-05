@@ -52,13 +52,11 @@ class TranslationsController < ApplicationController
     conn.post('/gists', payload)
   end
 
-  def redirect_after_create
-    if insert_translation.save
-      redirect_to :back
-    else
-      puts '-----------Fail------------'
-    end
-  end
+  # def redirect_after_create
+  #   if insert_translation.save
+  #     redirect_to :back
+  #   end
+  # end
 
   def insert_translation
     get_user_info
@@ -115,7 +113,10 @@ class TranslationsController < ApplicationController
     }
     conn.patch(gist_uri, update_gist_payload(translation_content))
     insert_translation
-    redirect_after_create
+    # redirect_after_create
+    if insert_translation.save
+      redirect_to :back
+    end
   end
 
   def index
