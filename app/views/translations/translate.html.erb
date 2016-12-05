@@ -61,7 +61,7 @@
 
 </script>
 <div class="row">
-  <div class="col-lg-12"><div class="goBack">
+  <div class=""><div class="goBack">
     <%= link_to 'Back', :back %>
     </div>
   </div>
@@ -91,7 +91,7 @@
   <div id="article-content">
     <p>
     <%=
-      raw @originalArticle.content
+     sanitize @originalArticle.content
     %>
     </p>
   </div>
