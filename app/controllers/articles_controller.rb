@@ -15,8 +15,8 @@ class ArticlesController < ApplicationController
     end
     @articles = Article.select("translations.id as tid, translations.user_id as translator_id, translations.user_name,translations.created_at as tdate, articles.*")
                       .joins("LEFT JOIN translations on translations.article_id = articles.id")
-                      .where(query.chomp('OR '))
-    @newarticles = Article.includes(:translations).where( :translations => { :article_id => nil } )
+                      .where(query.chomp('OR ')).order('translations.created_at desc')
+    @newarticles = Article.includes(:translations).where( :translations => { :article_id => nil } ).order('articles.created_at desc')
   end
 
   # GET /articles/1
