@@ -115,7 +115,7 @@ RSpec.describe TranslationsController, type: :controller do
     end
   end
 
-  describe TranslationsController do
+  describe TranslationsController, :type => :controller do
     it "Connect GitHub should return json content" do
       VCR.use_cassette 'controller/github' do
         actual = controller.connect_github
@@ -156,6 +156,27 @@ RSpec.describe TranslationsController, type: :controller do
         expected = "{\"current_gist_id\":\"0ab52a4794e43e286f66fdf7d495ce25\"}"
         expect(response.body).to eq(expected)
       end
+    end
+  end
+
+  it "add comment should return list of comments" do
+    VCR.use_cassette 'controller/add_comment' do
+      FactoryGirl.build(:article_1)
+      get :create_gist, params: { article_id: 1, translateHere: 'hello'}, session: valid_session
+      params = { current_gist_id: '0ab52a4794e43e286f66fdf7d495ce25', comment: 'yolo comment'}
+      response = get :add_comment, params: params, session: valid_session
+      expect(response.body).not_to be_nil
+    end
+  end
+
+  it "update gist" do
+    VCR.use_cassette 'controller/update_gist' do
+      FactoryGirl.build(:article_1)
+      get :create_gist, params: { article_id: 1, translateHere: 'hello'}, session: valid_session
+      params = { article_id: 1, current_gist_id: '0ab52a4794e43e286f66fdf7d495ce25', translateHere: 'hello999', gist_filename: '11480917514.txt'}
+      request.env['HTTP_REFERER'] = '/translate?article_id=1&ts=1480937674919'
+      response = get :update_gist, params: params, session: valid_session
+      response.should redirect_to(request.env['HTTP_REFERER'])
     end
   end
 end
