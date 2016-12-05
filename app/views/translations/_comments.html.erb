@@ -1,6 +1,8 @@
 <% if !@user.nil? %>
-<div class="col-lg-12" id="commentArea">
 
+<div class="col-lg-12" id="commentArea">
+  <div class="commentTitle">Comments: <%= JSON.parse(comments).count %>
+  </div>
 <%#= form_tag('/addcomment', method: "get", class: "") do %>
     <%= hidden_field_tag 'current_gist_id_', current_gist_id %>
     <div class="commentAvatar pull-left">

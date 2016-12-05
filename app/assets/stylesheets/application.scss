@@ -148,7 +148,7 @@ body
 
   margin-top: 10px;
   padding: 5px;
-  font-size: 12px;
+  font-size: 13px;
   .commentBy{
     font-weight: 500;
 
@@ -351,5 +351,18 @@ textarea:focus, textarea:active{
 #article_content
 {
   display: none;
+}
+.commentDate
+{
+  font-weight: normal;
+  color: #7C7C7C;
+  padding-left: 15px;
+  font-size: 12px;
+}
+
+.commentTitle
+{
+  padding-bottom: 20px;
+  color: #666666;
 }
 /**/
