@@ -21,3 +21,4 @@ coverage
 
 .DS_Store
 public/assets/*
+spec/cassettes

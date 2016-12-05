@@ -6,7 +6,7 @@ FactoryGirl.define do
     article_section "MyString"
     translation_section "MyString"
     user_name "Teera"
-    gist_id "123456"
+    gist_id "4a88aaac27a90e782bb1e866ed1ab5fe"
   end
 
   factory :invalid_translation, class: Translation  do
@@ -28,7 +28,13 @@ FactoryGirl.define do
     gist_id "123456"
   end
 
-  factory :translation2, class: Translation do
-
+  factory :translation_2, class: Translation do
+    article_id 2
+    user_id "mrteera"
+    status false
+    article_section "MyString"
+    translation_section "MyString"
+    user_name "Teera"
+    gist_id "4a88aaac27a90e782bb1e866ed1ab5fe"
   end
 end

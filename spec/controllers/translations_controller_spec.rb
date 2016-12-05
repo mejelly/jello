@@ -55,15 +55,16 @@ RSpec.describe TranslationsController, type: :controller do
 
   describe "GET #show" do
     it "assigns the requested translation as @translation" do
-      gist = File.join(Rails.root, 'spec/controllers/test_data/gist.json')
-      stub_request(:get, 'http://gist.mejelly.com:8000/gists/123456').
-          to_return(body: File.read(gist))
-      gist_comment = File.join(Rails.root, 'spec/controllers/test_data/gist_comment.json')
-      stub_request(:get, "http://gist.mejelly.com:8000/gists/123456/comments").
-          to_return(body: File.read(gist_comment))
-      translation = Translation.create! valid_attributes
-      get :show, params: { id: translation.to_param }, session: valid_session
-      expect(assigns(:translations)).to eq(@translation)
+      translation = FactoryGirl.build(:translation)
+      controller.instance_variable_set(:@current_gist_id, '4a88aaac27a90e782bb1e866ed1ab5fe')
+      controller.instance_variable_set(:@translation, translation)
+      VCR.use_cassette 'controller/translation_show' do
+        translation = Translation.create! valid_attributes
+        get :show, params: { id: translation.to_param }, session: valid_session
+        expect(assigns(:translations)).to eq(@translation)
+        expect(controller.instance_variable_get(:@translatedText)).to eq('<p>This is the translation</p>')
+        expect(controller.instance_variable_get(:@gist_filename)).to eq('11480877849.txt')
+      end
     end
   end
 
@@ -131,12 +132,15 @@ RSpec.describe TranslationsController, type: :controller do
     end
 
     it "fetch gist should get translated text and filename" do
-      VCR.use_cassette 'controller/gist_text' do
-        @github_token = controller.get_github_token
-        params[:article_id]
-        # @current_gist_id = '4a88aaac27a90e782bb1e866ed1ab5fe'
+      VCR.use_cassette 'controller/fetch_gist' do
+        github_token = controller.get_github_token
+        controller.instance_variable_set(:@github_token, github_token)
+        current_gist_id = '4a88aaac27a90e782bb1e866ed1ab5fe'
+        controller.instance_variable_set(:@current_gist_id, current_gist_id)
         actual = controller.fetch_gist
         expect(actual).not_to be_nil
+        expect(controller.instance_variable_get(:@translatedText)).to eq('<p>This is the translation</p>')
+        expect(controller.instance_variable_get(:@gist_filename)).to eq('11480877849.txt')
       end
     end
 
@@ -177,6 +181,26 @@ RSpec.describe TranslationsController, type: :controller do
       request.env['HTTP_REFERER'] = '/translate?article_id=1&ts=1480937674919'
       response = get :update_gist, params: params, session: valid_session
       response.should redirect_to(request.env['HTTP_REFERER'])
+    end
+  end
+
+  it "GET translate" do
+    VCR.use_cassette 'controller/get_translate' do
+      get :create_gist, params: { article_id: 1, translateHere: 'hello'}, session: valid_session
+      response = get :translate, params: { article_id: 1}, session: valid_session
+      expect(response.body).not_to be_nil
+      expect(controller.instance_variable_get(:@current_gist_id)).to eq('2be87997ab4d8189a859c1381dcb6ca1')
+      expect(controller.instance_variable_get(:@article_section)).to eq(nil)
+    end
+  end
+
+  it "GET profile that shows list of user's translations" do
+    VCR.use_cassette 'controller/get_profile' do
+      get :create_gist, params: { article_id: 1, translateHere: 'hello'}, session: valid_session
+      get :translate, params: { article_id: 1}, session: valid_session
+      response  = get :profile
+      expect(response.body).not_to be_nil
+      expect(controller.instance_variable_get(:@articles)).not_to be_nil
     end
   end
 end
