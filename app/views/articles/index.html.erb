@@ -11,7 +11,9 @@ if(@newarticles.length > 0)%>
         <%= link_to article.title, article %> <span class="displayDate"><%= time_ago_in_words(article.created_at) %> ago</span>
         <span class="pull-right">
           <% if(!@current_user.nil?) %>
-            <a href="<%= translate_path(article_id: article.id )%>" target="_self">Translate This Article</a>
+            <a href="<%= translate_path(article_id: article.id )%>" target="_self">
+              <%= image_tag("pencil.png", class: "translate_icon")%>
+            </a>
           <% end %>
         </span>
       </li>

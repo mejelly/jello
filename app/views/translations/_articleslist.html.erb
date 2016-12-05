@@ -1,8 +1,6 @@
 <ul class="list-group">
   <% articles.each do |article| %>
       <li class="list-group-item">
-
-
         <%
           if(is_profile)
             if(!article.article_section.nil?)%>
@@ -16,25 +14,14 @@
             <span><%= link_to article.title+" : "+article.user_name.to_s, show_path(id:article.tid) %></span>
         <% end %>
         <span class="displayDate"><%= time_ago_in_words(article.tdate) %> ago</span>
-
-
         <span class="pull-right">
           <% if(!@current_user.nil?) %>
-            <a href="<%= translate_path(article_id: article.id )%>" target="_self">Translate This Article</a> |
-            <%= link_to 'Original Article', article %>
+            <a href="<%= translate_path(article_id: article.id )%>" target="_self">
+              <%= image_tag("pencil.png", class: "translate_icon")%>
+            </a>
+            <%= link_to image_tag('doc.png', class: 'original_article_icon'), article %>
           <% end %>
         </span>
       </li>
   <% end %>
 </ul>
-
-
-
-
-
-
-
-
-
-
-
