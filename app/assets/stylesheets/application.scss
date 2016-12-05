@@ -42,7 +42,7 @@ body
   }
 }
 #pgHeader{
-  padding-top: 20px; padding-bottom: 20px; margin-bottom: 50px;
+  padding-top: 20px; padding-bottom: 20px; margin-bottom: 10px;
   font-weight: 500;
   font-size: 13px;
   background: #00acf1; color: white;
@@ -195,9 +195,10 @@ body
   }
 }
 #profileDiv>div{
-  padding: 30px;
+  padding: 40px;
   color:#2E2F30;
-
+  padding-left: 0px;
+  padding-top: 0;
 }
 .pgTitle
 {
@@ -207,7 +208,7 @@ body
   padding-bottom: 10px;color: #005e81;
   *
   {
-    color: #005e81;
+    color: #005e81 !important;
   }
 }
 #headerUserInfo
@@ -300,7 +301,7 @@ p, ol, ul, td {
 }
 #newarticle
 {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .arrow-inner
@@ -332,5 +333,18 @@ p, ol, ul, td {
 }
 textarea:focus, textarea:active{
   outline: none;
+}
+.articleaArea
+{
+  padding: 20px 0;
+}
+.goBack
+{
+  font-size: 13px;
+  margin: 20px 0;
+  background: url(back.png) no-repeat;
+  background-position-x: 0;
+  background-size: contain;
+  padding-left: 16px;
 }
 /**/

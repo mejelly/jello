@@ -1,7 +1,9 @@
 <p id="notice"><%= notice %></p>
 <% if(!@current_user.nil?) %>
     <div id="newarticle"><%= link_to 'New Article', new_article_path, id: "" %></div>
-<% end %>
+<% end
+
+if(@newarticles.length > 0)%>
 <div class="pgTitle">Articles</div>
 <ul class="list-group">
   <% @newarticles.each do |article| %>
@@ -16,7 +18,7 @@
       <% end %>
 </ul>
 <div>
-
+<% end %>
 </div>
 <div class="pgTitle">Translated Articles</div>
 <%= render 'translations/articleslist', articles: @articles, is_profile:false %>

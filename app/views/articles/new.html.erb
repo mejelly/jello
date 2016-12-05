@@ -3,6 +3,9 @@
     //var editor = new MediumEditor('.enableMediumEditor');
   });
 </script>
+<div class="goBack">
+  <%= link_to 'Back', :back %>
+</div>
 <div class="pgTitle">New Article</div>
 
 <%= render 'form', article: @article %>
