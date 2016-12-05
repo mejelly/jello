@@ -6,7 +6,7 @@
         <div class="commentDiv container-fluid">
           <div class="commentBy">
             <img src="<%=  value['user']['avatar_url'] %>" class="commentAvator"/>
-            <%=  value['user']['login'] %><span class="commentDate"><%= time_ago_in_words(value['created_at']) %></span>
+            <%=  value['user']['login'] %><span class="displayDate"><%= time_ago_in_words(value['created_at']) %> ago</span>
           </div>
           <div class="commentBody"><%=  value['body'] %></div>
         </div>
