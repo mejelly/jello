@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [ :edit, :update, :destroy]
+  before_action :set_article, only: [ :show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy]
   before_action :get_user_info, only: [:index, :show, :new]
 
@@ -20,16 +20,8 @@ class ArticlesController < ApplicationController
   end
 
   # GET /articles/1
-  # GET /articles/1.jso
+  # GET /articles/1.json
   def show
-    @temp = Translation.order('translations.id DESC').select("translations.*, articles.*").joins(:article).where("translations.user_id": @currentuser[0] ).where(article_id:params[:id]).limit(1)
-    if(@temp.length>0)
-      @temp.each do |item|
-        @article=item
-      end
-    else
-      set_article
-    end
   end
 
   # GET /articles/new
