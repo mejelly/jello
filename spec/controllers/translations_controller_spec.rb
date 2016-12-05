@@ -129,5 +129,24 @@ RSpec.describe TranslationsController, type: :controller do
         expect(actual).not_to be_nil
       end
     end
+
+    it "fetch gist should get translated text and filename" do
+      VCR.use_cassette 'controller/gist_text' do
+        @github_token = controller.get_github_token
+        params[:article_id]
+        # @current_gist_id = '4a88aaac27a90e782bb1e866ed1ab5fe'
+        actual = controller.fetch_gist
+        expect(actual).not_to be_nil
+      end
+    end
+
+    it "list comments should return comments" do
+      VCR.use_cassette 'controller/list_comments' do
+        @github_token = controller.get_github_token
+        controller.instance_variable_set(:@current_gist_id, '4a88aaac27a90e782bb1e866ed1ab5fe')
+        actual = controller.fetch_gist
+        expect(actual).not_to be_nil
+      end
+    end
   end
 end
