@@ -16,9 +16,11 @@
         <span class="displayDate"><%= time_ago_in_words(article.tdate) %> ago</span>
         <span class="pull-right">
           <% if(!@current_user.nil?) %>
-            <a href="<%= translate_path(article_id: article.id )%>" target="_self">
-              <%= image_tag("pencil.png", class: "translate_icon")%>
-            </a>
+            <%  if(!is_profile) %>
+              <a href="<%= translate_path(article_id: article.id )%>" target="_self">
+                <%= image_tag("pencil.png", class: "translate_icon")%>
+              </a>
+            <% end %>
             <%= link_to image_tag('doc.png', class: 'original_article_icon'), article %>
           <% end %>
         </span>
