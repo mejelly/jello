@@ -11,5 +11,10 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe TranslationsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "purge cache should return ok" do
+    VCR.use_cassette 'helpers/purge_cache' do
+      response = purge_cache('/gists/d3384bd4408a856f8bff235d4ddf0310')
+      expect(response.body).to eq("OK\n")
+    end
+  end
 end

@@ -82,3 +82,4 @@ gem 'omniauth-auth0', '~> 1.4.1'
 gem 'dotenv-rails', require: 'dotenv/rails-now', group: [:development, :test]
 gem 'faraday'
 gem 'typhoeus'
+gem 'vcr'
