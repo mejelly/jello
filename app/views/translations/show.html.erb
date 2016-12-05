@@ -1,3 +1,8 @@
+<div class="goBack">
+  <div class="col-lg-12">
+    <%= link_to 'Back', :back %>
+  </div>
+</div>
 <div class="col-lg-12 pgTitle">
 <% if(!@article.url.empty?) %>
       <%=link_to @article.title, @article.url, :target => "_blank"%>

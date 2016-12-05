@@ -1,7 +1,7 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-<div class="pgTitle pull-left">
+<div class="goBack">
+  <%= link_to 'Back', :back %>
+</div>
+<div class="pgTitle">
   <%= link_to @article.title, @article.url, target: '_blank' %>
 </div>
 <%
@@ -10,12 +10,12 @@
 <% else%>
     <a target= "_self"href="<%= translate_path(article_id: @article.id )%>">Translate This Article</a>
 <% end %>
-</p>
 
-<p>
-  <%= @article.content %>
-</p>
+
+<div class="articleaArea">
+  <%= raw @article.content %>
+</div>
 
 <%#=link_to 'Edit', edit_article_path(@article) %>
 
-<%= link_to 'Back', articles_path %>
+

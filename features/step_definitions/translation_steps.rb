@@ -17,13 +17,13 @@ When(/^He creates a new article$/) do
   click_link 'New Article'
   fill_in 'article_title', with: @article_1.title #'This is my article'
   fill_in 'article_url', with: @article_1.url #'http://mejello.com'
-  fill_in 'article_content', with: @article_1.content #'Hello, there! This is a content yay'
+  page.execute_script("$('.medium-editor-element').html('#{@article_1.content}')")
+  page.execute_script("$('#article_content').html('#{@article_1.content}')")
   click_button 'Create Article'
-
 end
 
 Then(/^He should see article detail$/) do
-  expect(page).to have_content("#{@article_1.content}")
+  expect(page).to have_content("#{@article_1.title}")
 end
 
 When(/^He clicks on Translate This Article link$/) do
