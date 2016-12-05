@@ -84,8 +84,6 @@ class TranslationsController < ApplicationController
     payload = '{ "body": "'+comment+'"}'
     conn.post(gist_uri, payload)
     list_comments
-    render :nothing => true
-    #redirect_to :back
   end
 
   def list_comments

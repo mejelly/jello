@@ -167,9 +167,10 @@ RSpec.describe TranslationsController, type: :controller do
     VCR.use_cassette 'controller/add_comment' do
       FactoryGirl.build(:article_1)
       get :create_gist, params: { article_id: 1, translateHere: 'hello'}, session: valid_session
-      params = { current_gist_id: '0ab52a4794e43e286f66fdf7d495ce25', comment: 'yolo comment'}
-      response = get :add_comment, params: params, session: valid_session
-      expect(response.body).not_to be_nil
+      controller.params[:current_gist_id] = '0ab52a4794e43e286f66fdf7d495ce25'
+      controller.params[:comment] = 'yolo'
+      comment = controller.add_comment
+      expect(comment).not_to be_nil
     end
   end
 
