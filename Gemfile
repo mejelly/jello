@@ -78,6 +78,7 @@ gem 'poltergeist'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'omniauth', '~> 1.3.1'
 gem 'omniauth-auth0', '~> 1.4.1'
+gem 'auth0'
 # Secrets should never be stored in code
 gem 'dotenv-rails', require: 'dotenv/rails-now', group: [:development, :test]
 gem 'faraday'

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+  get 'logout/logout'
   resources :translations
   resources :articles
   root to: 'articles#index'
@@ -14,5 +14,6 @@ Rails.application.routes.draw do
   get 'addcomment' =>'translations#add_comment'
   get 'show' =>'translations#show'
   get 'profile' => 'translations#profile'
+  get '/logout' => 'logout#logout'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

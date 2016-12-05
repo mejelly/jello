@@ -41,6 +41,8 @@ GEM
     addressable (2.4.0)
     arel (7.1.4)
     ast (2.3.0)
+    auth0 (4.0.0)
+      httmultiparty (~> 0.3.16)
     autoprefixer-rails (6.5.1.1)
       execjs
     aws-sdk (2.6.19)
@@ -135,6 +137,12 @@ GEM
       sysexits (~> 1.1)
     hashdiff (0.3.0)
     hashie (3.4.6)
+    httmultiparty (0.3.16)
+      httparty (>= 0.7.3)
+      mimemagic
+      multipart-post
+    httparty (0.14.0)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     jbuilder (2.6.0)
       activesupport (>= 3.0.0, < 5.1)
@@ -164,6 +172,7 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
+    mimemagic (0.3.2)
     mini_portile2 (2.1.0)
     minitest (5.9.1)
     multi_json (1.12.1)
@@ -320,6 +329,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  auth0
   aws-sdk
   bootstrap-sass (~> 3.3.6)
   byebug
