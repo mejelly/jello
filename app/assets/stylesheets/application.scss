@@ -345,7 +345,7 @@ textarea:focus, textarea:active{
 .goBack
 {
   font-size: 13px;
-  margin: 20px 0;
+  margin: 20px 0 20px 10px;
   background-image: image-url('back.png');
   background-repeat: no-repeat;
   background-position-x: 0;
@@ -356,7 +356,9 @@ textarea:focus, textarea:active{
 .translate_icon, .original_article_icon
 {
   width: 16px;
+  margin-right: 4px;
   opacity: 0.7;
+  vertical-align: top;
 }
 
 .translate_icon:hover, .original_article_icon:hover
@@ -382,3 +384,10 @@ textarea:focus, textarea:active{
   color: #666666;
 }
 /**/
+@media (max-width:768px) {
+  #profileDiv>div
+    {
+      padding:0 15px;
+
+    }
+}
