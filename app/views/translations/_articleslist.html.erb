@@ -15,7 +15,7 @@
         <% else %>
             <span><%= link_to article.title+" : "+article.user_name.to_s, show_path(id:article.tid) %></span>
         <% end %>
-        <span class="displayDate"><%= time_ago_in_words(article.updated_at) %> ago</span>
+        <span class="displayDate"><%= time_ago_in_words(article.tdate) %> ago</span>
 
 
         <span class="pull-right">
