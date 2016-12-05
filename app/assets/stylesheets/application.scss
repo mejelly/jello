@@ -234,17 +234,14 @@ a:hover
 {
   position: absolute;
   margin-left: 10px;
-
-
+  z-index: 1;
 }
 #siteHint
 {
-
   border-radius: 3px;
   position: relative;
-  background: #fff;
+  background: #f4f4f4;
   padding: 10px;
-
 }
 #tipHint
 {
@@ -258,7 +255,7 @@ a:hover
   border-width: 16px;
   border-style: solid;
   pointer-events: none;
-  border-top-color: #fff;
+  border-top-color: #f4f4f4;
 }
 #closeHint
 {
