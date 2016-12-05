@@ -14,9 +14,9 @@ class ArticlesController < ApplicationController
       query +="(translations.created_at::text like '#{tempdate}%' AND translations.gist_id = '#{t.gist_id}') OR "
     end
     @articles = Article.select("translations.id as tid, translations.user_id as translator_id, translations.user_name,translations.created_at as tdate, articles.*")
-                      .joins("LEFT JOIN translations on translations.article_id = articles.id")
-                      .where(query.chomp('OR '))
-    @newarticles = Article.includes(:translations).where( :translations => { :article_id => nil } )
+                      .joins("INNER JOIN translations on translations.article_id = articles.id")
+                      .where(query.chomp('OR ')).order('translations.updated_at desc')
+    @newarticles = Article.includes(:translations).where( :translations => { :article_id => nil } ).order('articles.created_at desc')
   end
 
   # GET /articles/1

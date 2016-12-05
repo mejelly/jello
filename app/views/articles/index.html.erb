@@ -8,7 +8,7 @@ if(@newarticles.length > 0)%>
 <ul class="list-group">
   <% @newarticles.each do |article| %>
       <li class="list-group-item">
-        <%= link_to article.title, article %>
+        <%= link_to article.title, article %> <span class="displayDate"><%= time_ago_in_words(article.created_at) %> ago</span>
         <span class="pull-right">
           <% if(!@current_user.nil?) %>
             <a href="<%= translate_path(article_id: article.id )%>" target="_self">Translate This Article</a>
