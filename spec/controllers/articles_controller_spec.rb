@@ -48,6 +48,7 @@ RSpec.describe ArticlesController, type: :controller do
   describe "GET #index" do
     it "assigns all articles as @articles" do
       article = Article.create! valid_attributes
+      FactoryGirl.create(:translation)
       get :index, params: {}, session: valid_session
       expect(assigns(:articles)).to eq([article])
     end
@@ -56,7 +57,7 @@ RSpec.describe ArticlesController, type: :controller do
   describe "GET #show" do
     it "assigns the requested article as @article" do
       article = Article.create! valid_attributes
-      FactoryGirl.build(:translation)
+      FactoryGirl.create(:translation)
       get :show, params: {id: article.to_param}, session: valid_session
       expect(assigns(:article)).to eq(article)
     end
