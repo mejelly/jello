@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 <% if(!@current_user.nil?) %>
-    <div id="newarticle"><%= link_to 'New Article', new_article_path, id: "" %></div>
+    <div id="newarticle"><%= link_to image_tag('doc.png',class: 'original_article_icon')+'New Article', new_article_path, id: "" %></div>
 <% end
 
 if(@newarticles.length > 0)%>

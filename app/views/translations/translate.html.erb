@@ -50,7 +50,7 @@
   });
   $(window).ready(function() { //alert(1)
     setHiddenField();
-    <% if(!@article_section.nil?) %>
+    <% if(!@article_section.nil? && @article_section!= '') %>
     if(getCurrentPath()[1] === undefined) {
       var url = getCurrentPath()[0] + "&ts=" + $.now() + "#<%= @article_section %>";
         location.href = url
