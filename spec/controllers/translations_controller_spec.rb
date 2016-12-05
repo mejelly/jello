@@ -148,5 +148,14 @@ RSpec.describe TranslationsController, type: :controller do
         expect(actual).not_to be_nil
       end
     end
+
+    it "create gist should render gist_id" do
+      VCR.use_cassette 'controller/create_gist' do
+        FactoryGirl.build(:article_1)
+        response = get :create_gist, params: { article_id: 1, translateHere: 'hello' }, session: valid_session
+        expected = "{\"current_gist_id\":\"0ab52a4794e43e286f66fdf7d495ce25\"}"
+        expect(response.body).to eq(expected)
+      end
+    end
   end
 end
