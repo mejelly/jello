@@ -97,14 +97,6 @@ class TranslationsController < ApplicationController
     @comments = response.body
   end
 
-  def purge_cache(uri)
-    request = Typhoeus::Request.new(
-      "http://gist.mejelly.com:8000#{uri}",
-      method: :purge,
-    )
-    request.run
-  end
-
   def update_gist_payload(translation_content)
     '{ "description": "updated gist", "public": true, "files": { "' \
     + params[:gist_filename] +'": { "content": "' + translation_content +'" } } }'
