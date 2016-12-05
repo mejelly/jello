@@ -182,7 +182,7 @@ class TranslationsController < ApplicationController
     end
     @articles = Article.select("translations.id as tid, translations.user_id as translator_id, translations.user_name,translations.created_at as tdate,translations.article_section as article_section, articles.*")
                     .joins("LEFT JOIN translations on translations.article_id = articles.id").where("translations.user_id =?",userinfo[0])
-                    .where(query.chomp('OR '))
+                    .where(query.chomp('OR ')).order('translations.updated_at desc')
   end
 
   # def saveGist
